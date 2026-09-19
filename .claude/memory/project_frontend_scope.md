@@ -1,6 +1,6 @@
 ---
 name: project-frontend-scope
-description: Decisão sobre expandir o toolkit pra front-end/UX, feita em 2026-09-19; design-tokens.css foi o primeiro módulo
+description: Decisão de expandir o toolkit pra front-end/UX (2026-09-19); tokens shippados, próximo passo é catálogo de exemplos de tela por direção estrutural, começando pelo menu
 metadata:
   type: project
 ---
@@ -33,11 +33,38 @@ A decisão sobre os módulos `signed-session`/`session-cookie` (formalizar ou
 não a sessão HMAC caseira do mundialito) ficou resolvida na mesma sessão:
 mantém como está — ver [PEGADINHAS.md](../../PEGADINHAS.md) e README.
 
+Ao explorar o item 2 (Button/Card), achado real: as implementações de
+mundialito/proficiencia-ucs/ponto-e-stock divergem de propósito (variantes,
+raio, `forwardRef`, loading state) — não é o mesmo código repetido, é o
+mesmo problema resolvido diferente 3 vezes. Extração de componente único
+foi **rejeitada por enquanto** (bateria contra a mesma regra dos 3 que já
+travou o `createAccessGate()`).
+
+**Item 2 evoluiu/foi substituído por uma ideia maior, ainda em aberto:**
+em vez de "biblioteca de componentes" ou "biblioteca de estilos de
+cor/fonte", o usuário quer um **catálogo de exemplos de TELA inteira, em
+direções estruturalmente diferentes** (não só cor/tokens — layout de
+verdade, ex. 3 menus de navegação bem diferentes entre si), pra escolher
+uma direção ANTES de desenhar o sistema de verdade — evitar reconstruir do
+zero a cada projeto. Primeiro teste combinado: **menu de navegação**.
+Duas personas reais como âncora: família Ponto E (financeiro-ponto-e,
+rh-pontoe, ponto-e-stock) = prático/funcional; mundialito = mais refinado
+esteticamente. Cor e fonte ficam FORA desse catálogo (variam por projeto,
+por decisão explícita do usuário) — o eixo é estrutura + espaçamento/peso.
+A ideia intermediária de "2 perfis de densidade" (Prático/Refinado, via os
+sliders Densidade/Escala tipo do explorer) não foi descartada, só ficou
+pra trás — cotada como mecanismo por trás das direções do menu.
+Detalhe/prompt de retomada completo: `HANDOFF.md` na raiz do projeto.
+
 **Why:** o usuário sentiu que o projeto tinha desviado do que ele queria
 (modularidade tipo "móveis modulados", focado em interface) e quase
 descartou o trabalho já feito antes de perceber que eram coisas diferentes
-(infra real vs. front-end que ainda não tinha começado).
+(infra real vs. front-end que ainda não tinha começado). A ideia de
+catálogo de telas surgiu depois de perceber que cor/fonte/densidade
+abstratas não bastavam — ele queria comparar algo concreto e reconhecível
+(uma tela de verdade) antes de decidir uma direção.
 
-**How to apply:** ao retomar o item 2 (componentes de UI), começar
-validando a distribuição React+Tailwind entre pacote e consumidor antes de
-desenhar a API dos componentes — é o ponto técnico mais arriscado da lista.
+**How to apply:** ao retomar, começar pelo menu (regra dos 3 — provar o
+formato com 1 caso antes de generalizar pra outras telas), usando as duas
+personas reais (Ponto E / mundialito) como pelo menos 2 das direções
+mostradas.

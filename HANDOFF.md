@@ -1,121 +1,116 @@
 # Handoff — 2026-09-19 (atualizado)
 
-> `v0.3.1` no ar, repo público: `github.com/edukern/edukern-toolkit`. 8
-> módulos, 22 testes passando, CI ativo (build + teste + checagem de
-> `dist/` desatualizado em todo push). **Primeiro consumidor real:**
-> `proficiencia-ucs` (`timing-safe-compare` + `supabase-client-node`,
-> migração completa).
+> `v0.4.0` no ar, repo público: `github.com/edukern/edukern-toolkit`. 27
+> testes passando, CI ativo. `design-tokens.css` (esqueleto de tokens,
+> migrado de `~/.claude/templates/`) é o primeiro módulo de front-end do
+> toolkit — ver `README.md`/`CHANGELOG.md`.
 
 ## ⏳ Pendente
 
-1. **Migração do `mundialito`** — revisão de impacto já aprovou com ressalvas.
-   Não fazer durante a janela do torneio.
-2. **Shortlist externa investigada de verdade — concluída.** 7 de 10 repos
-   originais clonados e lidos a fundo (next-forge, Next-js-Boilerplate,
-   cal.com, dub, twenty, medusa, outline); metabase só superficial;
-   `course-builder` não existe mais no GitHub. Nenhum achado força mudança
-   no toolkit — só confirmou decisões já tomadas (tokens OKLCH, módulo por
-   capacidade de infra, RLS). Substitutos pra referência de curso levantados:
-   `classroomio` (schema curso/lição/exercício/submissão, o mais útil),
-   `learnhouse`, `epicshop`. Proposta de schema pro `proficiencia-ucs`
-   baseada no `classroomio` já está pronta na memória do audit — ver
-   arquivo abaixo.
-3. **Investigação de padrões visuais premium — concluída** (motivada pelo
-   usuário achar os projetos "feios/básicos"). Achados: template
-   `~/.claude/templates/design-tokens.css` já atualizado com sombra em
-   camadas (`-border`/`-ambient`/`-highlight`, padrão Vercel/Linear) e
-   sugestão de 3 pares de fonte fora do padrão "IA". Detalhe completo
-   (border-beam, texto shimmer, grid de fundo) na memória do audit.
-4. **4 lacunas reais achadas numa revisão meticulosa do toolkit em
-   2026-09-19** (review manual, não passou pelo `revisor-impacto` — não
-   tocava schema/auth/deploy de produção):
-   - ~~Sem CI~~ — **resolvido** (`.github/workflows/ci.yml`: build + teste +
-     falha se `dist/` commitado não bater com o build; `npm run build` agora
-     limpa `dist/` antes — achado ao vivo um `.test.js` órfão de um arquivo
-     de teste já renomeado, que sobrevivia a rebuilds sem isso).
-   - ~~Buracos de teste~~ — **resolvido parcialmente.** `getServiceClient`
-     (cache, erro de env faltando) e `createTenantClient` (client Supabase
-     real, mockando só `server-only` — não desliga a proteção real, só
-     permite testar a lógica de criação isolada) agora têm teste. O arquivo
-     `session-cookie.test.ts` estava mal nomeado (só testava
-     `secure-cookie-option`) — renomeado para `secure-cookie-option.test.ts`.
-     **`setSignedCookie`/`clearSignedCookie`/`readSignedCookie` continuam
-     sem teste — tentei e esbarrei numa limitação real, não me faltou
-     tentar**: `session-cookie.ts` importa `next/headers`, que só resolve
-     via bare specifier dentro do bundler do Next (webpack/turbopack); via
-     `node --test` puro (mesmo com `mock.module`), a resolução ESM falha
-     antes de qualquer mock entrar em ação (`ERR_MODULE_NOT_FOUND`, next
-     15.5.x não tem `exports` map). Fechar isso de verdade exige um dos
-     dois, nenhum é "adicionar teste": (a) teste de integração real dentro
-     de uma app Next (rota de verdade, não unitário), ou (b) mudar
-     `session-cookie.ts` pra aceitar um cookie store injetável (API
-     diferente da atual). Decisão de design em aberto, não tarefa pendente.
-   - ~~Sem `CHANGELOG.md`~~ — **resolvido** (`CHANGELOG.md` na raiz, uma
-     entrada por tag desde v0.1.0).
-   - ~~Cluster #1 sem `createAccessGate()` composto~~ — **`revisor-impacto`
-     rodou em 2026-09-19, veredito: NÃO implementar ainda.** Risco P1: o
-     shape esboçado não cabe no único consumidor real que justificaria a
-     abstração (`mundialito`) — `verifyCode(input, expected)` não cobre os
-     3 candidatos de código + lookup no Supabase que o `lib/auth/verify-code.ts`
-     real precisa, e `maxAge` fixo na construção do gate reintroduziria um
-     bug de produção **já corrigido e documentado** no próprio mundialito
-     (`lib/auth/cookie.ts:10-15`: sessão de 12h pra quem devia ter 7 dias e
-     vice-versa, porque a validade depende do papel, não é um valor único
-     por instância). Decisão: esperar a migração do mundialito (item 1)
-     revelar o shape real antes de extrair qualquer composição — extrair de
-     um esboço isolado, sem 2º caso real, é abstração prematura. Quando a
-     migração do mundialito for retomada, prototipar a composição **dentro**
-     do `lib/auth/*` dele primeiro; só depois extrair pro toolkit o que
-     sobrar. Detalhe completo (cadeia de impacto, checklist) na memória do
-     audit.
-5. **Clusters #3/#4 do scan original** (tokens de design — já resolvido de
-   outro jeito, não é candidato; `dnd-kit`/`react-pdf` — precisa desenho, não
-   é extração mecânica).
+1. **Próximo passo real: catálogo de exemplos de tela por direção
+   estrutural, começando pelo menu.** Ideia amadureceu nesta sessão (ver
+   `.claude/memory/project_frontend_scope.md`) — não é mais "biblioteca de
+   cor/fonte", é: gerar 2-3 versões de uma MESMA tela, estruturalmente
+   diferentes entre si (não só cor/espaçamento — layout mesmo, ex. menu
+   lateral vs. topo vs. estilo command-palette), o usuário aponta a
+   direção que quer, e só DAÍ o sistema de verdade é desenhado a partir
+   dali. Objetivo: parar de reconstruir do zero a cada projeto.
+   - Escopo combinado: **começar só pelo menu de navegação** (regra dos 3 —
+     provar o formato com 1 caso antes de generalizar pra outras telas).
+   - Duas personas reais já ancoradas pelo usuário, usar como pelo menos 2
+     das direções do menu: **família Ponto E** (financeiro-ponto-e,
+     rh-pontoe, ponto-e-stock) = prático/funcional, densidade alta, pouco
+     ornamento; **mundialito** = mais cuidado esteticamente, mais respiro.
+   - Ideia intermediária de "2 perfis de densidade/peso" (Prático vs.
+     Refinado, baseada nos sliders `Densidade`/`Escala tipo` do explorer)
+     foi levantada e NÃO foi rejeitada, só ficou pra trás quando o usuário
+     pediu algo mais concreto (exemplos de tela reais, não só tokens
+     abstratos). Vale reconsiderar como MECANISMO por trás das direções do
+     menu, não como proposta rival.
+   - Cor e tipografia de fonte ficam de fora desse catálogo — o usuário foi
+     explícito: variam projeto a projeto, não são o eixo de diferenciação
+     aqui. O eixo é estrutura/layout + espaçamento/peso.
+2. **Migração do `mundialito`** — revisão de impacto já aprovou com
+   ressalvas. Não fazer durante a janela do torneio. Ao retomar,
+   prototipar a composição de `createAccessGate()` DENTRO do `lib/auth/*`
+   do mundialito primeiro (revisor-impacto vetou extrair pro toolkit de um
+   esboço isolado — ver `project_personal_library_audit.md`).
+3. **Buracos de teste na cola:** `setSignedCookie`/`clearSignedCookie`/
+   `readSignedCookie` (`session-cookie.ts`) continuam sem teste —
+   `next/headers` não resolve fora do bundler do Next, nem com
+   `mock.module`. Fechar de verdade exige (a) teste de integração dentro
+   de uma app Next real, ou (b) mudar `session-cookie.ts` pra aceitar um
+   cookie store injetável. Decisão de design em aberto, não é só "faltou
+   tentar".
+4. **Arquivo duplicado pendente de remoção manual pelo usuário** (bloqueio
+   de segurança impediu apagar automaticamente):
+   ```bash
+   rm "C:/Users/eduke/.claude/templates/design-tokens.css"
+   ```
+5. **Bug pequeno encontrado no `design-system-explorer.html`:** o badge de
+   contraste WCAG às vezes trava mostrando `1.00:1`/valores errados em
+   todos os pares depois de trocar paleta+arquétipo+fonte em sequência,
+   mesmo com o texto visivelmente legível na tela — parece cálculo não
+   recalculando ou lendo os sliders OKLCH errados. Não debugado a fundo.
+   Vale corrigir antes de confiar nele pra decisão de cor de verdade.
 
 ## 🧠 Decisões que afetam o próximo passo
 
+- Regra dos 3 aplicada a Button/Card: código real de mundialito/
+  proficiencia-ucs/ponto-e-stock diverge de propósito (variantes, raio,
+  `forwardRef`, estado de loading) — **não** virou componente único no
+  toolkit. Só o `cn`/merge de classe também não bateu o padrão (só
+  mundialito tem). Antes de extrair um Button/Card real, esperar
+  repetição de verdade — não forçar convergência agora.
+- Todos os 5 projetos (mundialito, proficiencia-ucs, keenfisher-repo,
+  ponto-e-stock, game-box) rodam a mesma stack: Next.js + React 19 +
+  Tailwind v4. `keenfisher-repo` tem sistema de tokens próprio, de
+  propósito fora do escopo do catálogo compartilhado.
+  4 dos 5 (exceto keenfisher) já usam os mesmos nomes de token
+  (`--color-accent`, `--color-canvas`, `--color-ink`...).
+- Tailwind v4 não escaneia `node_modules` por padrão — pra um componente
+  React do toolkit funcionar estilizado num projeto consumidor, o
+  projeto precisa de uma linha `@source "../node_modules/@edukern/toolkit";`
+  no CSS global (confirmado na doc oficial). Não é bloqueio, só um passo a
+  documentar quando existir componente de verdade pra distribuir.
 - Modelo é pacote via git dependency, não monorepo — motivo em `CLAUDE.md`.
-- `supabase-client` importa `server-only` incondicionalmente (proposital,
-  detecta uso acidental no bundle do cliente). Para consumidor que compartilha
-  o mesmo módulo entre código Next e script standalone (`tsx`/`node` puro —
-  caso real: `proficiencia-ucs`), use `supabase-client-node` — mesma função,
-  sem o guard.
+- `supabase-client` importa `server-only` incondicionalmente (proposital);
+  consumidor que compartilha o módulo entre Next e script standalone usa
+  `supabase-client-node`.
 - Todo `exports` do `package.json` precisa da condição `default` além de
-  `import`/`types` — sem ela, `npx tsx` falha com
-  `ERR_PACKAGE_PATH_NOT_EXPORTED` mesmo quando o import ESM real funcionaria
-  (o resolvedor de paths do tsx passa por um probe estilo CommonJS antes do
-  ESM). Manter esse padrão em módulos novos.
-- `resolveSecureCookieOption` e `signTenantToken` moraram em arquivo próprio,
-  sem o guard `server-only`, especificamente pra serem testáveis com `node
-  --test` puro fora do Next.
-- `supabase-tenant-client` (multi-tenant) continua só com a variante guardada
-  — ainda não apareceu um 2º caso real que precise da versão sem guard, como
-  apareceu para `supabase-client`.
-- Pacote é ESM-only (`"type": "module"`, sem build CJS) — funciona bem no
-  ecossistema Next.js/ESM-first do usuário; um consumidor CommonJS puro
-  (`require()`) não vai conseguir usar o pacote. Não documentado no README
-  ainda — considerar adicionar se aparecer um caso real.
+  `import`/`types` (compat `tsx`). Manter em módulos novos, incluindo os
+  de CSS/front-end.
+- Pacote é ESM-only.
 
 ## 📁 Arquivos relevantes
 
-- `src/` — os 8 módulos atuais.
-- `.github/workflows/ci.yml` — build + teste + checagem de drift do `dist/`.
-- `README.md` — API completa + limites conhecidos de cada módulo.
-- `D:\projetos\mundialito\.claude\memory\project_personal_library_audit.md` —
-  histórico completo do audit (33+ repos avaliados, clusters, decisões,
-  revisões de impacto, achados por repo, shortlist externa, padrões visuais,
-  proposta de schema pro `proficiencia-ucs`).
+- `.claude/memory/project_frontend_scope.md` — histórico da decisão de
+  expandir pro front-end e do amadurecimento da ideia (tokens → biblioteca
+  de estilo → densidade/peso → catálogo de exemplos de tela). Atualizar ao
+  retomar.
+- `src/design-tokens.css` — esqueleto de tokens já shippado (v0.4.0).
+- `_visual/explorer.html` — cópia do Design System Explorer, já dentro do
+  projeto (interativo no browser pane só funciona daqui, não de fora da
+  pasta). Tem o bug do item 5 acima.
+- `D:\projetos\mundialito\.claude\memory\project_personal_library_audit.md`
+  — histórico completo do audit original (33+ repos, clusters, decisões,
+  revisões de impacto). Só relevante pros itens 2/3 do Pendente.
 
 ---
 ▶ PROMPT DE RETOMADA
 
 ```
-Leia HANDOFF.md em D:\projetos\edukern-toolkit. v0.3.1 no ar (8 módulos, 22
-testes, CI ativo), proficiencia-ucs migrado, shortlist externa e padrões
-visuais investigados de verdade (concluído). Próximo passo real: fechar as
-lacunas da revisão meticulosa (item 4 do Pendente) — decidir se o cluster de
-portão de acesso sobe pra um `createAccessGate()` composto, fechar os
-buracos de teste na cola (getServiceClient, session-cookie, createTenantClient),
-e criar CHANGELOG.md. Migração do mundialito fica esperando a janela do
-torneio terminar. Detalhe completo na memória do audit (caminho acima).
+Leia HANDOFF.md em D:\projetos\edukern-toolkit e .claude/memory/project_frontend_scope.md.
+v0.4.0 no ar (design-tokens.css shippado). Próximo passo real: montar um
+catálogo de exemplos de tela por direção ESTRUTURAL (não só cor/fonte,
+layout mesmo), começando pelo menu de navegação — gerar 2-3 versões bem
+diferentes (pelo menos uma no espírito "família Ponto E" = prático/denso,
+uma no espírito "mundialito" = mais refinado/espaçoso), mostrar lado a
+lado, deixar o usuário escolher a direção antes de desenhar o sistema de
+verdade. Cor e fonte ficam FORA do catálogo (variam por projeto). Antes de
+construir: confirmar com o usuário se o mecanismo por trás das direções
+reaproveita os sliders de Densidade/Escala tipo do design-system-explorer.html
+(ideia intermediária levantada, não descartada). Seguir formato de resposta
+do CLAUDE.md global (TL;DR + Preciso de você, sem seção de risco de
+rotina) e explicar o "porquê" de qualquer princípio nomeado aplicado.
 ```
