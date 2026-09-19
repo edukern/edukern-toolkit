@@ -67,6 +67,17 @@ de verdade (`@supabase/ssr` + `supabase.auth.getUser()`, como o `game-box`)
 não tem o que fazer com esses dois módulos — nesse caso só `supabase-client` e
 `timing-safe-compare` se aplicam, se aplicarem.
 
+- `@edukern/toolkit/design-tokens.css` — esqueleto de design tokens (Tailwind
+  v4 `@theme`): nomes semânticos de cor/tipografia/sombra/raio, padrão de tema
+  escuro, sem valores de marca (tem placeholders tipo `SUA_FONTE_TITULO` de
+  propósito). **Não é pra importar direto em produção** — é molde: copiar o
+  conteúdo pro `globals.css` de um projeto novo e preencher fonte/cor da
+  marca ali. O que garante consistência entre projetos são os *nomes* dos
+  tokens (`--color-accent`, `--color-ink`, `--shadow-card`...), não os
+  valores — cada projeto tem sua própria identidade visual. 4 dos 5 projetos
+  atuais (mundialito, proficiencia-ucs, ponto-e-stock, game-box) já seguem
+  essa convenção; o keenfisher tem sistema de tokens próprio, fora de escopo.
+
 ## Pegadinhas que não viraram código
 
 Bug/trap de infra, ferramenta ou arquitetura que não dá pra empacotar em função —

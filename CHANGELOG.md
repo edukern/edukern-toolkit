@@ -4,6 +4,16 @@ Formato livre (não é registry npm com changelog automático — instalação �
 via tag git, `github:edukern/edukern-toolkit#vX.Y.Z`). Toda versão nova que
 um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 
+## v0.4.0
+
+- feat: `design-tokens.css` — primeira peça de front-end do toolkit (as
+  demais eram lógica de infra/auth). Esqueleto de design tokens Tailwind v4
+  (`@theme`: cor, tipografia, sombra, raio + padrão de tema escuro), sem
+  valores de marca — é molde pra copiar num projeto novo, não import de
+  produção. Migrado de `~/.claude/templates/design-tokens.css` (uso pessoal
+  solto) pra virar fonte única; 4 dos 5 projetos atuais já seguem essa
+  convenção de nomes de token.
+
 ## v0.3.1
 
 - fix: adiciona a condição `default` a todo `exports` do `package.json`, ao

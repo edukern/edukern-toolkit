@@ -1,0 +1,100 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Esqueleto de design tokens — Tailwind v4 (@theme).
+   Copiar para o globals.css de um projeto novo e ajustar SÓ os valores.
+   Regra de ouro: componente nunca usa cor/sombra/raio hardcoded — só o token.
+   Trocar marca, fonte ou tema = editar AQUI, em um lugar só.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* Pares fora do padrão "IA" (evitar Inter/Roboto/Poppins como default) —
+   trocar SUA_FONTE_* por um destes pares, ou outro equivalente:
+     - Editorial: Fraunces (display, serifada) + Public Sans (corpo)
+     - Geométrica com caráter: Space Grotesk (display) + Inter Tight (corpo)
+     - Técnica/produto: Instrument Serif (display) + Geist (corpo) */
+@import url('https://fonts.googleapis.com/css2?family=SUA_FONTE_TITULO:wght@400;500;600;700&family=SUA_FONTE_CORPO:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  /* ── COR (OKLCH; trocar o matiz/hue uma vez propaga pro tema todo) ──────
+     Escolher o hue da marca primeiro, depois tingir TODOS os neutros nele
+     (chroma 0.005–0.015) — dá coesão sem parecer cinza puro.
+     Tema claro abaixo. Para escuro, ver bloco comentado no fim do arquivo. */
+  --color-canvas:      oklch(0.96 0.013 95);    /* fundo da página */
+  --color-surface:     oklch(0.995 0.004 95);   /* cards / superfícies */
+  --color-fill:        oklch(0.93 0.012 100);   /* preenchimento sutil (placeholder, track) */
+  --color-ink:         oklch(0.33 0.035 110);   /* texto primário */
+  --color-ink-muted:   oklch(0.52 0.030 108);   /* texto secundário */
+  --color-ink-faint:   oklch(0.64 0.025 108);   /* dicas / labels fracos */
+  --color-accent:      oklch(0.46 0.055 112);   /* destaque: CTA, seleção, ativo */
+  --color-accent-hover:oklch(0.41 0.055 112);
+  --color-accent-ink:  oklch(0.97 0.020 95);    /* texto sobre o accent */
+  --color-line:        oklch(0.87 0.012 100);   /* bordas / divisores */
+
+  /* Semânticos de estado (ajustar chroma pro tema; manter legíveis em AA) */
+  --color-success:     oklch(0.52 0.12 150);
+  --color-warning:     oklch(0.60 0.13 70);
+  --color-danger:      oklch(0.55 0.18 25);
+
+  /* ── TIPOGRAFIA (display = títulos, sans = corpo) ──────────────────────── */
+  --font-sans:    'SUA_FONTE_CORPO', system-ui, sans-serif;
+  --font-display: 'SUA_FONTE_TITULO', system-ui, sans-serif;
+
+  /* ── ELEVAÇÃO (sombra tingida pro matiz da marca, não preto puro) ────────
+     Profundidade real é composição de 2-3 camadas com propósito diferente
+     cada uma (padrão Vercel/Linear/Stripe), não uma sombra grande genérica:
+       -border   → aro finíssimo que desenha a borda do card
+       -ambient  → sombra difusa que dá a sensação de afastamento do fundo
+       -highlight→ realce claro (inset) simulando luz vindo de dentro
+     `--shadow-card` combina as três num box-shadow multi-valor; use os
+     tokens -border/-ambient/-highlight direto só se precisar animar um
+     sozinho (ex.: só o highlight no hover). */
+  --shadow-card-border:    0 0 0 1px rgba(40, 44, 25, 0.05);
+  --shadow-card-ambient:   0 2px 10px rgba(40, 44, 25, 0.07);
+  --shadow-card-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  --shadow-card:       var(--shadow-card-border), var(--shadow-card-ambient), var(--shadow-card-highlight);
+  --shadow-card-hover: var(--shadow-card-border), 0 8px 24px rgba(40, 44, 25, 0.12), var(--shadow-card-highlight);
+
+  /* ── RAIO ──────────────────────────────────────────────────────────────── */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Títulos pegam a fonte display automaticamente (cascata).
+     Em títulos que não são h1/h2/h3 (labels, nomes de card, botões),
+     usar a classe utilitária `font-display`. */
+  h1, h2, h3 { font-family: var(--font-display); }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Como usar nos componentes (sempre token, nunca hex):
+     bg-canvas / bg-surface / bg-fill / bg-accent
+     text-ink / text-ink-muted / text-ink-faint / text-accent / text-accent-ink
+     border-line / shadow-card / hover:shadow-card-hover / font-display
+     Opacidade: bg-accent/10, border-accent/40, text-ink-faint/60 (cascateiam).
+
+   TEMA ESCURO — provar que a troca é de 1 lugar: basta sobrescrever os
+   valores dos tokens dentro de um seletor. Exemplo (descomentar e ajustar):
+
+   @media (prefers-color-scheme: dark) {
+     @theme {
+       --color-canvas:  oklch(0.22 0.02 110);
+       --color-surface: oklch(0.27 0.02 110);
+       --color-fill:    oklch(0.32 0.02 110);
+       --color-ink:     oklch(0.95 0.02 95);
+       --color-ink-muted: oklch(0.78 0.02 100);
+       --color-ink-faint: oklch(0.60 0.02 100);
+       --color-line:    oklch(0.38 0.02 110);
+       --color-accent:  oklch(0.72 0.10 112);
+       --color-accent-ink: oklch(0.20 0.03 110);
+     }
+   }
+   Nenhum componente muda — só os valores acima.
+   ────────────────────────────────────────────────────────────────────────── */
