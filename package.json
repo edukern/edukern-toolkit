@@ -1,0 +1,50 @@
+{
+  "name": "@edukern/toolkit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "exports": {
+    "./supabase-client": {
+      "types": "./dist/supabase-client.d.ts",
+      "import": "./dist/supabase-client.js"
+    },
+    "./signed-session": {
+      "types": "./dist/signed-session.d.ts",
+      "import": "./dist/signed-session.js"
+    },
+    "./timing-safe-compare": {
+      "types": "./dist/timing-safe-compare.d.ts",
+      "import": "./dist/timing-safe-compare.js"
+    },
+    "./session-cookie": {
+      "types": "./dist/session-cookie.d.ts",
+      "import": "./dist/session-cookie.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "tsc",
+    "test": "npm run build && node --test dist/*.test.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "@types/node": "^22.10.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "next": "^15.0.0",
+    "server-only": "^0.0.1"
+  },
+  "peerDependencies": {
+    "@supabase/supabase-js": ">=2",
+    "next": ">=14",
+    "server-only": ">=0.0.1"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    },
+    "server-only": {
+      "optional": true
+    }
+  }
+}
