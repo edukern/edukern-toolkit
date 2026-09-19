@@ -17,7 +17,7 @@ function b64urlDecode(s: string): Buffer {
  * `T` é o formato do seu payload de sessão (role, ids, etc.) — valide o shape
  * na função `isValid` que você passa pra `verify`.
  */
-export function createSignedSession<T extends Record<string, unknown>>(secretEnvVar: string) {
+export function createSignedSession<T extends object>(secretEnvVar: string) {
   function secret(): string {
     const s = process.env[secretEnvVar];
     if (!s || s.length < 16) throw new Error(`${secretEnvVar} ausente ou curto demais`);
@@ -51,8 +51,9 @@ export function createSignedSession<T extends Record<string, unknown>>(secretEnv
       try {
         const parsed = JSON.parse(b64urlDecode(body).toString("utf8"));
         if (!parsed || typeof parsed.iat !== "number" || !Number.isFinite(parsed.iat)) return null;
+        const iat: number = parsed.iat;
         if (!isValid(parsed)) return null;
-        if (Date.now() - parsed.iat > maxAgeMs) return null;
+        if (Date.now() - iat > maxAgeMs) return null;
         return parsed as T & { iat: number };
       } catch {
         return null;

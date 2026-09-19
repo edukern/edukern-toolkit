@@ -1,6 +1,6 @@
 {
   "name": "@edukern/toolkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
@@ -24,7 +24,6 @@
   },
   "scripts": {
     "build": "tsc",
-    "prepare": "tsc",
     "test": "npm run build && node --test dist/*.test.js"
   },
   "devDependencies": {

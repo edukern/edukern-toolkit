@@ -1,4 +1,5 @@
 import "server-only";
+import { createHash } from "node:crypto";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 const cache = new Map<string, SupabaseClient>();
@@ -17,7 +18,7 @@ export function getServiceClient(
   if (!url || !key) {
     throw new Error(`${urlEnvVar} e ${keyEnvVar} são obrigatórios`);
   }
-  const cacheKey = `${url}:${key}`;
+  const cacheKey = `${url}:${createHash("sha256").update(key).digest("hex")}`;
   const cached = cache.get(cacheKey);
   if (cached) return cached;
   const client = createClient(url, key, { auth: { persistSession: false } });
