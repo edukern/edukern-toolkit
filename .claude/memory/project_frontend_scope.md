@@ -110,3 +110,24 @@ catálogo. Sem certeza se precisa de command bar — tirado por ora (YAGNI),
 documentar se pedir de volta. Resultado: `_visual/sidebar-collapsible.html`,
 com toggle de verdade (ícone-only ↔ ícone+label), não só um rail estático
 como a direção C original do catálogo.
+
+**Menu fechado — decisão de forma:** o catálogo produz molde de
+referência (HTML/CSS pra copiar/adaptar por projeto), não componente
+React empacotado no toolkit. Mesma razão que já bloqueou Button/Card pela
+regra dos 3 (sem 3 consumidores reais convergindo, não compensa
+empacotar) — evita over-engineering: construir infraestrutura de
+distribuição pra um padrão usado uma vez só.
+
+**2026-09-19, segundo caso do catálogo: dashboard.** Usuário pediu pra
+avançar pras outras partes; eu (Claude) recomendei fechar o menu primeiro
+por causa da regra dos 3, ele delegou de volta ("faça os passos que você
+recomendou"). Decisão de forma nova: o shell (sidebar já escolhida) fica
+FIXO no catálogo de dashboard — só o conteúdo da área principal varia
+entre as 3 direções (A KPI denso/Ponto E, B narrativo/mundialito, C
+operacional em tabela, terceira direção sem persona fixa). Isso é
+diferente do catálogo do menu (que comparava 3 shells inteiros) porque
+agora já existe um shell decidido pra encaixar o conteúdo dentro — logo,
+mais realista testar o conteúdo já dentro do shell real do que isolado.
+Arquivo: `_visual/dashboard-catalog.html`, testado no browser (3 direções
+alternam certo, toggle do shell funciona). Aguardando o usuário escolher/
+comentar.
