@@ -21,3 +21,11 @@ Cada projeto que passar a consumir este pacote é uma migração separada, feita
 um de cada vez — nunca em lote. O primeiro candidato é o `mundialito`, mas a
 migração do próprio mundialito ainda não começou (o CLAUDE.md dele exige
 `revisor-impacto` antes de tocar nos portões de acesso).
+
+## Revisão de impacto obrigatória (antever quebras)
+
+Antes de implementar qualquer mudança que toque schema/dados persistidos, serviços/módulos compartilhados, fluxo crítico de negócio, auth/permissões, ou deploy, rode primeiro o agente `revisor-impacto` (em `.claude/agents/`) e apresente o resultado para aprovação ANTES de mexer. Não depende de pedirem — é o passo padrão.
+
+Mudança trivial e isolada (texto, estilo de 1 componente, sem efeito em dados/contratos) não precisa — diga que é trivial e siga.
+
+A análise deve sempre responder: "como dá pra testar isso ANTES de ir pro ar?" e, se houver dado existente afetado, qual backup específico fazer antes.

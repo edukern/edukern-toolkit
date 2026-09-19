@@ -1,6 +1,6 @@
 {
   "name": "@edukern/toolkit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
@@ -8,6 +8,10 @@
     "./supabase-client": {
       "types": "./dist/supabase-client.d.ts",
       "import": "./dist/supabase-client.js"
+    },
+    "./supabase-client-node": {
+      "types": "./dist/supabase-client-node.d.ts",
+      "import": "./dist/supabase-client-node.js"
     },
     "./signed-session": {
       "types": "./dist/signed-session.d.ts",

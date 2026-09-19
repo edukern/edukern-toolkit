@@ -20,11 +20,14 @@ install quebra em build que não instala devDependencies, ex. Vercel).
 - `@edukern/toolkit/supabase-client` — cliente Supabase service-role,
   cacheado, server-only. **Importa `server-only` incondicionalmente** — se seu
   projeto também usa esse cliente fora do bundler do Next (script rodado via
-  `tsx`/`node` puro), essa importação vai lançar. Não tem opção de desligar o
-  guard neste pacote de propósito (ver `game-box/src/lib/supabase/admin.ts`
-  pra um exemplo real desse caso e por que ele optou por não usar o guard) —
-  se precisar dos dois casos, copie as ~15 linhas sem o guard em vez de
-  importar daqui.
+  `tsx`/`node` puro), essa importação vai lançar. Use
+  `@edukern/toolkit/supabase-client-node` nesse caso (mesma função, sem o
+  guard — você garante manualmente que nunca roda do lado do cliente).
+- `@edukern/toolkit/supabase-client-node` — igual ao acima, sem `server-only`.
+  Existe porque `proficiencia-ucs` compartilha o mesmo módulo de store entre
+  Server Actions (Next) e scripts standalone (`tsx`) — só o segundo caso real
+  de uso fora do Next justificou abrir essa variante (ver `game-box` pro
+  primeiro caso, que na época ficou só copiando as ~15 linhas).
 - `@edukern/toolkit/signed-session` — token de sessão assinado por HMAC
   (payload genérico, sem estado no servidor).
 - `@edukern/toolkit/session-cookie` — grava/lê/limpa o token acima num cookie
