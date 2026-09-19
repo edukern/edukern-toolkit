@@ -1,186 +1,122 @@
 # Handoff — 2026-09-19 (atualizado)
 
 > `v0.4.0` no ar, repo público: `github.com/edukern/edukern-toolkit`. 27
-> testes passando, CI ativo. `design-tokens.css` (esqueleto de tokens,
-> migrado de `~/.claude/templates/`) é o primeiro módulo de front-end do
-> toolkit — ver `README.md`/`CHANGELOG.md`.
+> testes passando, CI ativo. Catálogo de telas por direção estrutural
+> completo: menu, dashboard, login, listagem, detalhe, formulário — os 6
+> fechados. Ver `.claude/memory/project_frontend_scope.md` pro histórico
+> completo das decisões (esse handoff só lista o que falta fazer).
 
-## ⏳ Pendente
+## ⏳ Pendente — próxima sessão
 
-1. **Menu fechado.** Direção C (sidebar colapsável escura,
-   `_visual/sidebar-collapsible.html`) é o molde de referência real —
-   decidido que o catálogo produz "molde pra copiar/adaptar" por projeto,
-   não componente React empacotado (mesma lógica que já rejeitou extrair
-   Button/Card pela regra dos 3: sem 3 consumidores reais convergindo,
-   não vira pacote). A (sidebar densa/Ponto E) e B (topbar espaçosa/
-   mundialito) continuam em `_visual/menu-catalog.html` como alternativas,
-   não foram descartadas.
-2. **Dashboard fechado — direção A (KPI denso).** `_visual/
-   sidebar-collapsible.html` agora combina as duas decisões: shell da
-   sidebar (menu) + conteúdo "Visão geral" no formato KPI denso (grade de
-   6 indicadores + tabela de atividade), testado no browser. B (narrativo/
-   mundialito) e C (operacional em tabela) continuam em
-   `_visual/dashboard-catalog.html` como alternativas, não descartadas.
-3. **Terceiro caso do catálogo, em andamento: login.**
-   `_visual/login-catalog.html` — login não herda o shell autenticado
-   (é a tela antes dele), por isso volta ao formato de comparar telas
-   inteiras, como o catálogo do menu. 3 direções: A card denso centralizado
-   (Ponto E), B split screen com painel de marca (mundialito), C
-   minimalista passwordless (terceira direção, sem persona fixa — link de
-   acesso por e-mail em vez de senha). Testado no browser (achei e
-   corrigi um bug real: `hidden` não escondia as direções B/C porque
-   `.dir-a/.dir-b/.dir-c` setavam `display:flex` direto na mesma classe
-   usada pro toggle — corrigido com `[hidden]{display:none}` explícito;
-   vale checar esse padrão se aparecer de novo em catálogos futuros).
-   **Login fechado — A e B mantidas como duas opções igualmente válidas**
-   (o usuário pediu explicitamente pra não eliminar nenhuma das duas,
-   diferente do menu/dashboard onde uma única direção virou a base). C
-   (minimalista passwordless) continua no arquivo, mas não foi escolhida.
-   - Central de ajuda **não vai virar catálogo** — a skill `central-ajuda`
-     já resolve isso de outro jeito (gera a página de verdade dentro do
-     projeto real, com dados e menu integrados), não faz sentido duplicar
-     como mockup de comparação.
-   - **Lembrete confirmado com o usuário:** todo molde do catálogo
-     (menu, dashboard, login) é ponto de partida estrutural pra
-     adaptar por projeto, não implementação final pronta pra importar.
-4. **Listagem, detalhe e formulário — os 3 fechados.**
-   - **Listagem — correção importante:** meu primeiro veredito (A padrão,
-     B secundária "só pra identidade visual leve") estava errado. O
-     usuário mostrou um print real do financeiro-ponto-e
-     (`Projeção de vendas por vendedor`) onde o card carrega tanta
-     densidade quanto a tabela: nome, atendimentos + ticket médio, barra
-     de progresso, 2 números (vendido + projeção) e um mini-gráfico
-     "venda por dia" com **hover revelando o detalhe do dia** (evita
-     poluição visual sem perder profundidade de análise). Reconstruí a
-     direção B em `_visual/listing-catalog.html` nesse nível (cards de
-     `Desempenho por vendedor`, gráfico com tooltip via `data-tip` +
-     `content:attr()`, testado no browser). **Não é mais "A padrão / B
-     secundária"** — A (tabela) serve dado tabular simples/operacional,
-     B (card denso) serve quando cada registro já é uma métrica de
-     desempenho por si só — mesmo raciocínio de "usos diferentes, não
-     concorrentes" do formulário/login. C (kanban) segue fora da decisão
-     de listagem, como já estava.
-   - **Padrão de interação anotado (não implementado ainda): hover
-     revelando detalhe.** Vale considerar como um "padrão de interação"
-     (item 3 do escopo front-end, ver `project_frontend_scope.md`) pra
-     qualquer gráfico/mini-visualização futura no toolkit — mostrar
-     detalhe só sob demanda em vez de cravar tudo na tela.
-   - **Detalhe fechado — C (scroll único) é o padrão**, A (abas) mantida
-     como alternativa pra registros com muita informação distinta
-     (documentos, histórico extenso). B (painel lateral) tinha um bug
-     real de posicionamento — o usuário viu no navegador de verdade
-     (`_visual/detail-catalog.html` aberto localmente) e o painel
-     aparecia flutuando, sem encostar nas bordas. Causa: o
-     `position:relative` estava no `<div class="dirpane dim-list">`
-     (altura = só o conteúdo, curta) em vez de `.main` (que já tinha
-     `position:relative` e estica pra altura cheia via flexbox) —
-     corrigido removendo o `position:relative` inline duplicado.
-     Confirmado corrigido a 1400px de largura. Mesmo com o bug corrigido,
-     o usuário disse que não gosta do padrão painel lateral por preferência
-     pessoal — não é só o bug. B segue no arquivo, sem o bug, mas não foi
-     escolhida.
-   - **Formulário mantido como estava:** A (wizard) pra criar um registro
-     novo, C (acordeão) pra editar um existente — usos diferentes, não
-     concorrentes, igual ao raciocínio do login. B (página única) como
-     fallback neutro.
-   - Referência real trazida pelo usuário: o formulário que candidatos
-     preenchem no `rh-pontoe` é um bom exemplo a olhar quando for
-     desenhar o formulário de verdade (não conferido ainda nesta sessão
-     — `rh-pontoe` não estava aberto).
-5. **Ideia trazida pelo usuário, ainda não implementada: link de
-   WhatsApp pré-preenchido (sem pagar API).** O `rh-pontoe` usa isso pra
-   avisar candidato de processo seletivo — um link tipo
+1. **Módulo de link de WhatsApp pré-preenchido** (`src/whatsapp-link.ts`
+   ou nome equivalente). Função pura: monta um link
    `https://wa.me/<telefone>?text=<mensagem codificada>` que abre o
-   WhatsApp do usuário já com a mensagem pronta pro número do
-   destinatário, sem precisar da API paga do WhatsApp Business. É um
-   candidato forte a módulo real do toolkit (não catálogo visual) — função
-   pura, sem dependência, mesmo estilo dos módulos `src/*.ts` que já
-   existem (`signed-session`, `secure-cookie-option`). Diferente do
-   Button/Card, não esbarra na regra dos 3 (não é lógica que diverge
-   entre projetos, é 1 linha determinística). **Aguardando o usuário
-   decidir se constrói agora ou fica só anotado pra depois.**
-6. **Migração do `mundialito`** — revisão de impacto já aprovou com
+   WhatsApp do destinatário com a mensagem pronta — sem pagar API do
+   WhatsApp Business. Padrão real usado no `rh-pontoe` pra avisar
+   candidato de processo seletivo. Sem dependência, não esbarra na regra
+   dos 3 (não há lógica divergente entre projetos pra convergir). Seguir
+   o estilo dos módulos `src/*.ts` já existentes (`signed-session.ts`,
+   `secure-cookie-option.ts`) — função pura + teste `*.test.ts` simples.
+2. **Generalizar o padrão de interação "hover revela detalhe."**
+   Demonstrado em `_visual/listing-catalog.html` (direção B — passar o
+   mouse numa barra do mini-gráfico mostra o detalhe do dia via CSS
+   `content:attr(data-tip)`, sem poluir a tela). Vale documentar como
+   padrão reaproveitável pra qualquer gráfico/mini-visualização futura
+   do toolkit.
+3. **Sessão explicativa: outros critérios de ajuste visual além de
+   densidade/escala tipográfica.** O usuário quer entender o vocabulário
+   usado em dev web/mobile pra conseguir pedir mudanças de tela sem saber
+   o termo exato — não é implementação, é explicar com exemplos práticos
+   critérios como: escala de espaçamento, elevação/sombra, raio de borda,
+   contraste, densidade de informação, grid/breakpoints, hierarquia
+   tipográfica, peso de ícone, velocidade de transição/motion, etc. Ideal
+   tecer a explicação com os sliders que já existem (`_visual/
+   explorer.html`, `_visual/menu-catalog.html` e os catálogos novos) como
+   exemplo concreto de cada critério, não uma lista abstrata solta.
+4. **Migração do `mundialito`** — revisão de impacto já aprovou com
    ressalvas. Não fazer durante a janela do torneio. Ao retomar,
    prototipar a composição de `createAccessGate()` DENTRO do `lib/auth/*`
-   do mundialito primeiro (revisor-impacto vetou extrair pro toolkit de um
-   esboço isolado — ver `project_personal_library_audit.md`).
-7. **Buracos de teste na cola:** `setSignedCookie`/`clearSignedCookie`/
+   do mundialito primeiro (revisor-impacto vetou extrair pro toolkit de
+   um esboço isolado — ver `project_personal_library_audit.md`).
+5. **Buracos de teste na cola:** `setSignedCookie`/`clearSignedCookie`/
    `readSignedCookie` (`session-cookie.ts`) continuam sem teste —
    `next/headers` não resolve fora do bundler do Next, nem com
    `mock.module`. Fechar de verdade exige (a) teste de integração dentro
    de uma app Next real, ou (b) mudar `session-cookie.ts` pra aceitar um
-   cookie store injetável. Decisão de design em aberto, não é só "faltou
-   tentar".
-8. **Arquivo duplicado pendente de remoção manual pelo usuário** (bloqueio
-   de segurança impediu apagar automaticamente):
-   ```bash
-   rm "C:/Users/eduke/.claude/templates/design-tokens.css"
-   ```
-9. **Bug pequeno encontrado no `design-system-explorer.html`:** o badge de
+   cookie store injetável. Decisão de design em aberto.
+6. **Bug pequeno no `_visual/design-system-explorer.html`:** o badge de
    contraste WCAG às vezes trava mostrando `1.00:1`/valores errados em
-   todos os pares depois de trocar paleta+arquétipo+fonte em sequência,
-   mesmo com o texto visivelmente legível na tela — parece cálculo não
-   recalculando ou lendo os sliders OKLCH errados. Não debugado a fundo.
-   Vale corrigir antes de confiar nele pra decisão de cor de verdade.
+   todos os pares depois de trocar paleta+arquétipo+fonte em sequência.
+   Não debugado a fundo. Vale corrigir antes de confiar nele pra decisão
+   de cor de verdade.
 
 ## 🧠 Decisões que afetam o próximo passo
 
+- Todo catálogo (`_visual/*-catalog.html`) é **molde de referência pra
+  copiar/adaptar por projeto**, não componente React empacotado — mesma
+  lógica que já rejeitou extrair Button/Card pela regra dos 3 (sem 3
+  consumidores reais convergindo, não compensa empacotar). Cor e
+  tipografia ficam sempre fora de propósito nos catálogos (variam por
+  projeto).
+- Direções escolhidas até agora (nenhuma elimina as outras do arquivo,
+  só define prioridade): menu = sidebar colapsável escura; dashboard =
+  KPI denso; login = card denso E split screen (as duas, contexto
+  decide); listagem = tabela E card denso (usos diferentes, não
+  hierarquia); detalhe = scroll único (painel lateral descartado por
+  preferência, não só bug); formulário = wizard pra criar E acordeão pra
+  editar (as duas).
 - Regra dos 3 aplicada a Button/Card: código real de mundialito/
   proficiencia-ucs/ponto-e-stock diverge de propósito (variantes, raio,
   `forwardRef`, estado de loading) — **não** virou componente único no
-  toolkit. Só o `cn`/merge de classe também não bateu o padrão (só
-  mundialito tem). Antes de extrair um Button/Card real, esperar
-  repetição de verdade — não forçar convergência agora.
-- Todos os 5 projetos (mundialito, proficiencia-ucs, keenfisher-repo,
-  ponto-e-stock, game-box) rodam a mesma stack: Next.js + React 19 +
-  Tailwind v4. `keenfisher-repo` tem sistema de tokens próprio, de
-  propósito fora do escopo do catálogo compartilhado.
-  4 dos 5 (exceto keenfisher) já usam os mesmos nomes de token
-  (`--color-accent`, `--color-canvas`, `--color-ink`...).
-- Tailwind v4 não escaneia `node_modules` por padrão — pra um componente
-  React do toolkit funcionar estilizado num projeto consumidor, o
-  projeto precisa de uma linha `@source "../node_modules/@edukern/toolkit";`
-  no CSS global (confirmado na doc oficial). Não é bloqueio, só um passo a
-  documentar quando existir componente de verdade pra distribuir.
+  toolkit. Esperar repetição de verdade antes de extrair.
+- Tailwind v4 não escaneia `node_modules` por padrão — um componente
+  React do toolkit precisa de `@source "../node_modules/@edukern/toolkit";`
+  no CSS global do consumidor (confirmado na doc oficial). Só relevante
+  quando existir componente de verdade pra distribuir.
 - Modelo é pacote via git dependency, não monorepo — motivo em `CLAUDE.md`.
 - `supabase-client` importa `server-only` incondicionalmente (proposital);
   consumidor que compartilha o módulo entre Next e script standalone usa
   `supabase-client-node`.
 - Todo `exports` do `package.json` precisa da condição `default` além de
-  `import`/`types` (compat `tsx`). Manter em módulos novos, incluindo os
-  de CSS/front-end.
+  `import`/`types` (compat `tsx`). Manter em módulos novos.
 - Pacote é ESM-only.
+- **Painel de navegador do Claude Code não é suficiente pra julgamento
+  visual fino** — já rendeu um falso-negativo (bug de CSS só apareceu
+  quando o usuário abriu o arquivo no navegador real dele). Oferecer o
+  caminho do arquivo pro usuário conferir localmente antes de fechar
+  decisão de design.
 
 ## 📁 Arquivos relevantes
 
-- `.claude/memory/project_frontend_scope.md` — histórico da decisão de
-  expandir pro front-end e do amadurecimento da ideia (tokens → biblioteca
-  de estilo → densidade/peso → catálogo de exemplos de tela). Atualizar ao
-  retomar.
-- `src/design-tokens.css` — esqueleto de tokens já shippado (v0.4.0).
-- `_visual/menu-catalog.html` — o catálogo em si (3 direções + sliders).
-  Standalone, sem dependência do explorer.html. Abrir no browser pane
-  (funciona interativo mesmo rodando de dentro do worktree/pasta do
-  projeto).
-- `_visual/explorer.html` — cópia do Design System Explorer, já dentro do
-  projeto (interativo no browser pane só funciona daqui, não de fora da
-  pasta). Tem o bug do item 5 acima.
+- `.claude/memory/project_frontend_scope.md` — histórico completo de
+  todas as decisões de catálogo desta sessão (o quê, por quê, exemplos
+  reais trazidos pelo usuário). Ler antes de continuar qualquer item do
+  front-end.
+- `_visual/*-catalog.html` (menu, dashboard, login, listing, detail,
+  form) + `_visual/sidebar-collapsible.html` (menu+dashboard combinados,
+  o molde mais "pronto" dos seis).
+- `src/*.ts` — módulos existentes, referência de estilo pro módulo novo
+  do WhatsApp (item 1 do Pendente).
 - `D:\projetos\mundialito\.claude\memory\project_personal_library_audit.md`
-  — histórico completo do audit original (33+ repos, clusters, decisões,
-  revisões de impacto). Só relevante pros itens 2/3 do Pendente.
+  — só relevante pro item 4 do Pendente (migração mundialito).
 
 ---
 ▶ PROMPT DE RETOMADA
 
 ```
 Leia HANDOFF.md em D:\projetos\edukern-toolkit e .claude/memory/project_frontend_scope.md.
-Catálogo de menus pronto em _visual/menu-catalog.html (3 direções: sidebar
-densa/Ponto E, topbar espaçosa/mundialito, rail colapsável+command bar;
-sliders Densidade/Escala tipo ajustam as 3 juntas). Pergunte ao usuário qual
-direção ele escolheu (ou se quer mix) e a partir dali desenhe o sistema de
-tokens/estrutura real do menu. Cor e fonte continuam fora de escopo. Regra
-dos 3: não generalizar o formato de catálogo pra outras telas até esse caso
-fechar. Seguir formato de resposta do CLAUDE.md global (TL;DR + Preciso de
-você, sem seção de risco de rotina) e explicar o "porquê" de qualquer
-princípio nomeado aplicado.
+3 pendências combinadas pra essa sessão: (1) criar src/whatsapp-link.ts —
+função pura que monta link wa.me pré-preenchido, sem API paga, estilo dos
+módulos src/*.ts existentes, com teste; (2) documentar o padrão de
+interação "hover revela detalhe" (demonstrado em
+_visual/listing-catalog.html direção B) como padrão reaproveitável do
+toolkit; (3) sessão EXPLICATIVA (não é código) sobre outros critérios de
+ajuste visual além dos sliders de densidade/escala tipográfica que já
+existem — espaçamento, elevação, raio, contraste, densidade de
+informação, grid/breakpoints, motion etc. — usando os catálogos já
+construídos como exemplo concreto de cada critério, pra o usuário
+conseguir pedir mudança de tela sem saber o termo técnico exato. Seguir
+formato de resposta do CLAUDE.md global (TL;DR + Preciso de você, sem
+seção de risco de rotina) e explicar o "porquê" de qualquer princípio
+nomeado aplicado.
 ```
