@@ -3,15 +3,19 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sidebar colapsável — direção escolhida</title>
+<title>Sidebar + dashboard — direções escolhidas</title>
 <!--
-  Versão refinada da direção C do _visual/menu-catalog.html (rail + command
-  bar), depois da escolha do usuário: sidebar escuro, colapsável de verdade
-  (ícone-only <-> ícone+label), sem command bar. Densidade/escala tipo
-  mantidas nos valores padrão do catálogo (--sp:1 / --ts:1.15) — o usuário
-  pediu explicitamente pra não reduzir o espaçamento que já estava ali.
-  A e B do catálogo continuam como alternativas pra outros projetos, não
-  foram descartadas.
+  Molde de referência real (copiar/adaptar por projeto, não componente
+  empacotado — ver .claude/memory/project_frontend_scope.md). Combina as
+  duas decisões já fechadas do catálogo de telas:
+  - Menu: direção C de _visual/menu-catalog.html (sidebar escuro,
+    colapsável de verdade ícone-only <-> ícone+label, sem command bar).
+  - Dashboard (Visão geral): direção A de _visual/dashboard-catalog.html
+    (KPI denso — grade de indicadores + tabela de atividade).
+  Densidade/escala tipo nos valores padrão dos catálogos (--sp:1 / --ts:1.15).
+  As direções não escolhidas (menu B/topbar, dashboard B/narrativo e
+  C/operacional em tabela) continuam nos respectivos arquivos de catálogo
+  como alternativas — não foram descartadas.
 -->
 <style>
   :root {
@@ -48,11 +52,13 @@
 
   .main { flex:1; padding:calc(20px*var(--sp)); min-width:0; }
   .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:calc(16px*var(--sp)); }
-  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:calc(12px*var(--sp)); margin-bottom:calc(16px*var(--sp)); }
-  .stat .l { font-size:11px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.05em; margin:0 0 6px; }
-  .stat .n { font-size:calc(20px*var(--ts)); font-weight:700; margin:0; }
-  .list .row { display:flex; justify-content:space-between; align-items:center; padding:calc(9px*var(--sp)) 0; border-bottom:1px solid var(--line); font-size:13px; }
-  .list .row:last-child { border-bottom:0; }
+  .kpi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:calc(10px*var(--sp)); margin-bottom:calc(10px*var(--sp)); }
+  .kpi-grid .stat .l { font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.05em; margin:0 0 4px; }
+  .kpi-grid .stat .n { font-size:calc(18px*var(--ts)); font-weight:700; margin:0; }
+  .kpi-grid .stat .d { font-size:11px; color:var(--ink-faint); margin:2px 0 0; }
+  .op-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .op-table th { text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); padding:0 calc(8px*var(--sp)) calc(6px*var(--sp)); }
+  .op-table td { padding:calc(7px*var(--sp)) calc(8px*var(--sp)); border-top:1px solid var(--line); }
   .badge { font-size:11px; font-weight:600; padding:2px 9px; border-radius:999px; background:color-mix(in oklab, var(--accent) 12%, transparent); color:var(--accent); }
   h3.title { font-size:calc(16px*var(--ts)); margin:0 0 calc(12px*var(--sp)); }
   .tabs { display:flex; gap:8px; margin-bottom:calc(14px*var(--sp)); }
@@ -82,15 +88,23 @@
       <div class="tabs"><button class="active" data-page="overview">Visão geral</button><button data-page="form">Cadastro</button></div>
       <div class="page" data-page="overview">
         <h3 class="title">Visão geral</h3>
-        <div class="stats">
-          <div class="card stat"><p class="l">Lançamentos</p><p class="n">128</p></div>
-          <div class="card stat"><p class="l">Pendentes</p><p class="n">12</p></div>
-          <div class="card stat"><p class="l">Saldo</p><p class="n">R$ 4,2k</p></div>
+        <div class="kpi-grid">
+          <div class="card stat"><p class="l">Lançamentos</p><p class="n">128</p><p class="d">+8 hoje</p></div>
+          <div class="card stat"><p class="l">Pendentes</p><p class="n">12</p><p class="d">−3 vs. ontem</p></div>
+          <div class="card stat"><p class="l">Saldo</p><p class="n">R$ 4,2k</p><p class="d">mês corrente</p></div>
+          <div class="card stat"><p class="l">Colaboradores</p><p class="n">34</p><p class="d">2 novos</p></div>
+          <div class="card stat"><p class="l">Ausências</p><p class="n">3</p><p class="d">hoje</p></div>
+          <div class="card stat"><p class="l">Estoque baixo</p><p class="n">7</p><p class="d">itens</p></div>
         </div>
-        <div class="card list">
-          <div class="row"><span>Ana Powers</span><span class="badge">Confirmado</span></div>
-          <div class="row"><span>Bruno Lima</span><span class="badge">Pendente</span></div>
-          <div class="row"><span>Carla Reis</span><span class="badge">Confirmado</span></div>
+        <div class="card">
+          <table class="op-table">
+            <thead><tr><th>Ação</th><th>Responsável</th><th>Quando</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Lançamento #1042</td><td>Ana Powers</td><td>10:32</td><td><span class="badge">Confirmado</span></td></tr>
+              <tr><td>Cadastro colaborador</td><td>Bruno Lima</td><td>09:58</td><td><span class="badge">Pendente</span></td></tr>
+              <tr><td>Ajuste de estoque</td><td>Carla Reis</td><td>09:10</td><td><span class="badge">Confirmado</span></td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div class="page" data-page="form" hidden>

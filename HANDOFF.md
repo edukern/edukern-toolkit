@@ -15,35 +15,33 @@
    não vira pacote). A (sidebar densa/Ponto E) e B (topbar espaçosa/
    mundialito) continuam em `_visual/menu-catalog.html` como alternativas,
    não foram descartadas.
-2. **Segundo caso do catálogo, em andamento: dashboard.**
-   `_visual/dashboard-catalog.html` — 3 direções de CONTEÚDO (o shell/
-   sidebar já é o fixo decidido no item 1): A KPI denso (Ponto E), B
-   narrativo (mundialito), C operacional em tabela (terceira direção,
-   sem persona fixa — tabela como elemento dominante). Testado no
-   browser, os 3 alternam certo. **Aguardando o usuário escolher/testar**
-   (mesmo padrão do menu: escolha define o que vira "molde" primeiro, não
-   elimina as outras).
-   - Próximas telas candidatas depois dessa: login, central de ajuda
-     (que já tem a skill `central-ajuda` pronta — avaliar se cobre o
-     caso antes de duplicar esforço aqui).
-2. **Migração do `mundialito`** — revisão de impacto já aprovou com
+2. **Dashboard fechado — direção A (KPI denso).** `_visual/
+   sidebar-collapsible.html` agora combina as duas decisões: shell da
+   sidebar (menu) + conteúdo "Visão geral" no formato KPI denso (grade de
+   6 indicadores + tabela de atividade), testado no browser. B (narrativo/
+   mundialito) e C (operacional em tabela) continuam em
+   `_visual/dashboard-catalog.html` como alternativas, não descartadas.
+   - Próximas telas candidatas: login, central de ajuda (que já tem a
+     skill `central-ajuda` pronta — avaliar se cobre o caso antes de
+     duplicar esforço aqui).
+3. **Migração do `mundialito`** — revisão de impacto já aprovou com
    ressalvas. Não fazer durante a janela do torneio. Ao retomar,
    prototipar a composição de `createAccessGate()` DENTRO do `lib/auth/*`
    do mundialito primeiro (revisor-impacto vetou extrair pro toolkit de um
    esboço isolado — ver `project_personal_library_audit.md`).
-3. **Buracos de teste na cola:** `setSignedCookie`/`clearSignedCookie`/
+4. **Buracos de teste na cola:** `setSignedCookie`/`clearSignedCookie`/
    `readSignedCookie` (`session-cookie.ts`) continuam sem teste —
    `next/headers` não resolve fora do bundler do Next, nem com
    `mock.module`. Fechar de verdade exige (a) teste de integração dentro
    de uma app Next real, ou (b) mudar `session-cookie.ts` pra aceitar um
    cookie store injetável. Decisão de design em aberto, não é só "faltou
    tentar".
-4. **Arquivo duplicado pendente de remoção manual pelo usuário** (bloqueio
+5. **Arquivo duplicado pendente de remoção manual pelo usuário** (bloqueio
    de segurança impediu apagar automaticamente):
    ```bash
    rm "C:/Users/eduke/.claude/templates/design-tokens.css"
    ```
-5. **Bug pequeno encontrado no `design-system-explorer.html`:** o badge de
+6. **Bug pequeno encontrado no `design-system-explorer.html`:** o badge de
    contraste WCAG às vezes trava mostrando `1.00:1`/valores errados em
    todos os pares depois de trocar paleta+arquétipo+fonte em sequência,
    mesmo com o texto visivelmente legível na tela — parece cálculo não

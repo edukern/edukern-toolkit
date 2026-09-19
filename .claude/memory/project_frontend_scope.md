@@ -131,3 +131,12 @@ mais realista testar o conteúdo já dentro do shell real do que isolado.
 Arquivo: `_visual/dashboard-catalog.html`, testado no browser (3 direções
 alternam certo, toggle do shell funciona). Aguardando o usuário escolher/
 comentar.
+
+**Dashboard fechado — direção A (KPI denso).** Escolha direta, sem
+ajuste pedido desta vez. `_visual/sidebar-collapsible.html` deixou de ser
+só o molde do menu e passou a combinar as duas decisões reais (shell +
+conteúdo "Visão geral" no formato KPI denso: 6 cards + tabela de
+atividade) — decisão de manter tudo em 1 arquivo evolutivo em vez de
+espalhar em vários arquivos "decisão final" por tela, já que cada tela
+nova reaproveita o shell anterior. B (narrativo) e C (operacional em
+tabela) continuam em `dashboard-catalog.html` como alternativas.
