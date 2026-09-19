@@ -167,3 +167,14 @@ catálogo novo — `dashboard-catalog.html` não teve esse bug porque a
 classe de toggle (`.dir`) não define `display` diretamente.
 
 Aguardando o usuário escolher uma direção.
+
+**Login fechado — A e B mantidas, não uma única "vencedora".** Diferente
+do menu e do dashboard (onde 1 direção virou a base combinada), pro login
+o usuário quis manter card denso centralizado (A) E split screen (B)
+como duas opções igualmente válidas — provavelmente porque a escolha
+entre elas depende mais do produto (interno/utilitário vs. algo com
+identidade de marca pra vender) do que de uma preferência estrutural
+fixa como a do menu. C (minimalista passwordless) segue no arquivo, só
+não foi escolhida. Padrão a levar pra próximos catálogos: "fechar" um
+caso não significa sempre reduzir a 1 direção — às vezes o resultado
+certo é reduzir o leque (3→2), não convergir pra 1.

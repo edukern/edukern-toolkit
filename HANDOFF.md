@@ -32,7 +32,10 @@
    `.dir-a/.dir-b/.dir-c` setavam `display:flex` direto na mesma classe
    usada pro toggle — corrigido com `[hidden]{display:none}` explícito;
    vale checar esse padrão se aparecer de novo em catálogos futuros).
-   **Aguardando o usuário escolher.**
+   **Login fechado — A e B mantidas como duas opções igualmente válidas**
+   (o usuário pediu explicitamente pra não eliminar nenhuma das duas,
+   diferente do menu/dashboard onde uma única direção virou a base). C
+   (minimalista passwordless) continua no arquivo, mas não foi escolhida.
    - Próxima tela candidata depois: central de ajuda (já tem a skill
      `central-ajuda` pronta — avaliar se cobre o caso antes de duplicar
      esforço aqui).
