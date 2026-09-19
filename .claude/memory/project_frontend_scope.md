@@ -68,3 +68,27 @@ abstratas não bastavam — ele queria comparar algo concreto e reconhecível
 formato com 1 caso antes de generalizar pra outras telas), usando as duas
 personas reais (Ponto E / mundialito) como pelo menos 2 das direções
 mostradas.
+
+**2026-09-19, primeira versão construída:** `_visual/menu-catalog.html` —
+3 direções estruturais lado a lado (A: sidebar densa/Ponto E, B: topbar
+espaçosa/mundialito, C: rail colapsável + command bar, terceira direção sem
+persona fixa). Mecanismo confirmado com o usuário: reaproveita os sliders
+Densidade/Escala tipo (`--sp`/`--ts`) do `_visual/explorer.html`, aplicados
+globalmente às 3 direções ao mesmo tempo (não por direção) para comparação
+direta na mesma configuração. Cor e tipografia ficam fixas/neutras (fora de
+propósito, por decisão já registrada).
+
+Durante a construção o usuário trouxe um ajuste de escopo: não queria só o
+menu isolado, queria ver o menu já dentro de "páginas exemplo do sistema" —
+e esclareceu que "componentes" ali significava elementos/estrutura de
+página, não componentes de UI reutilizáveis em código (isso mantém o item 2
+do catálogo — Button/Card — rejeitado por enquanto, sem contradição). Cada
+uma das 3 direções ganhou 2 páginas alternáveis por abas (Visão geral +
+Cadastro/formulário) usando o MESMO shell de menu, pra avaliar a direção
+across tipos de tela reais, não só numa tela solta.
+
+Arquivo é standalone (sem dependência do explorer.html), só reaproveita o
+mesmo padrão de tokens CSS + `--sp`/`--ts`. Interativo funciona no browser
+pane mesmo fora da pasta raiz do projeto (worktree) — confirmado ao vivo,
+diferente do aviso antigo sobre o explorer.html (que pode já estar
+desatualizado, vale reconferir se aparecer de novo).
