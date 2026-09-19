@@ -1,6 +1,6 @@
 {
   "name": "@edukern/toolkit",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
@@ -20,11 +20,30 @@
     "./session-cookie": {
       "types": "./dist/session-cookie.d.ts",
       "import": "./dist/session-cookie.js"
+    },
+    "./supabase-tenant-client": {
+      "types": "./dist/supabase-tenant-client.d.ts",
+      "import": "./dist/supabase-tenant-client.js"
+    },
+    "./sign-tenant-token": {
+      "types": "./dist/sign-tenant-token.d.ts",
+      "import": "./dist/sign-tenant-token.js"
+    },
+    "./secure-cookie-option": {
+      "types": "./dist/secure-cookie-option.d.ts",
+      "import": "./dist/secure-cookie-option.js"
+    },
+    "./revocable-token": {
+      "types": "./dist/revocable-token.d.ts",
+      "import": "./dist/revocable-token.js"
     }
   },
   "scripts": {
     "build": "tsc",
     "test": "npm run build && node --test dist/*.test.js"
+  },
+  "dependencies": {
+    "jose": "^5.9.0"
   },
   "devDependencies": {
     "typescript": "^5.7.0",

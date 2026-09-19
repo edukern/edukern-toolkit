@@ -1,13 +1,21 @@
 import "server-only";
 import { cookies } from "next/headers";
+import { resolveSecureCookieOption, type RequestLike } from "./secure-cookie-option.js";
+
+export { resolveSecureCookieOption, type RequestLike } from "./secure-cookie-option.js";
 
 /** Grava um token de sessão (ver `signed-session`) num cookie httpOnly seguro. */
-export async function setSignedCookie(name: string, token: string, maxAgeMs: number): Promise<void> {
+export async function setSignedCookie(
+  name: string,
+  token: string,
+  maxAgeMs: number,
+  request?: RequestLike,
+): Promise<void> {
   const jar = await cookies();
   jar.set(name, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: resolveSecureCookieOption(request),
     path: "/",
     maxAge: Math.floor(maxAgeMs / 1000),
   });
