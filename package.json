@@ -70,6 +70,11 @@
       "import": "./dist/br-formatters.js",
       "default": "./dist/br-formatters.js"
     },
+    "./cep-lookup": {
+      "types": "./dist/cep-lookup.d.ts",
+      "import": "./dist/cep-lookup.js",
+      "default": "./dist/cep-lookup.js"
+    },
     "./design-tokens.css": "./src/design-tokens.css"
   },
   "scripts": {

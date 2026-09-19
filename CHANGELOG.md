@@ -14,8 +14,10 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 - feat: `calendar-invite` — `buildGoogleCalendarLink()` + `buildIcsFile()`,
   convite de calendário pré-preenchido sem OAuth.
 - feat: `br-formatters` — validação/formatação de CPF, CNPJ e telefone BR.
-- docs: `_visual/interaction-patterns.md` — padrão "hover revela detalhe" e
-  "compartilhar nativo (Web Share API) com fallback".
+- feat: `cep-lookup` — `fetchAddressByCep()` (ViaCEP, sem chave).
+- docs: `_visual/interaction-patterns.md` — padrões "hover revela detalhe",
+  "compartilhar nativo (Web Share API) com fallback", "máscara de valor em
+  R$ enquanto digita" e "comprovante como imagem (canvas, sem lib)".
 - feat: `design-tokens.css` — primeira peça de front-end do toolkit (as
   demais eram lógica de infra/auth). Esqueleto de design tokens Tailwind v4
   (`@theme`: cor, tipografia, sombra, raio + padrão de tema escuro), sem

@@ -86,6 +86,10 @@ não tem o que fazer com esses dois módulos — nesse caso só `supabase-client
   com ou sem pontuação) e `formatBrPhone` (fixo/celular). Formatação de moeda
   não entrou — `Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'})`
   nativo já resolve, sem precisar de wrapper.
+- `@edukern/toolkit/cep-lookup` — `fetchAddressByCep(cep)` busca endereço via
+  ViaCEP (gratuito, sem chave). Retorna `null` (não lança) quando o CEP é
+  válido no formato mas não existe na base dos Correios — diferente de erro
+  de rede/servidor, que aí sim lança.
 - `@edukern/toolkit/design-tokens.css` — esqueleto de design tokens (Tailwind
   v4 `@theme`): nomes semânticos de cor/tipografia/sombra/raio, padrão de tema
   escuro, sem valores de marca (tem placeholders tipo `SUA_FONTE_TITULO` de
