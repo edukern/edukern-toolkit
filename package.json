@@ -50,6 +50,26 @@
       "import": "./dist/revocable-token.js",
       "default": "./dist/revocable-token.js"
     },
+    "./whatsapp-link": {
+      "types": "./dist/whatsapp-link.d.ts",
+      "import": "./dist/whatsapp-link.js",
+      "default": "./dist/whatsapp-link.js"
+    },
+    "./pix-copy-paste": {
+      "types": "./dist/pix-copy-paste.d.ts",
+      "import": "./dist/pix-copy-paste.js",
+      "default": "./dist/pix-copy-paste.js"
+    },
+    "./calendar-invite": {
+      "types": "./dist/calendar-invite.d.ts",
+      "import": "./dist/calendar-invite.js",
+      "default": "./dist/calendar-invite.js"
+    },
+    "./br-formatters": {
+      "types": "./dist/br-formatters.d.ts",
+      "import": "./dist/br-formatters.js",
+      "default": "./dist/br-formatters.js"
+    },
     "./design-tokens.css": "./src/design-tokens.css"
   },
   "scripts": {

@@ -67,6 +67,25 @@ de verdade (`@supabase/ssr` + `supabase.auth.getUser()`, como o `game-box`)
 não tem o que fazer com esses dois módulos — nesse caso só `supabase-client` e
 `timing-safe-compare` se aplicam, se aplicarem.
 
+- `@edukern/toolkit/whatsapp-link` — `buildWhatsAppLink(phone, message)` monta
+  um link `wa.me` que abre o WhatsApp do destinatário com mensagem
+  pré-preenchida, sem API paga do WhatsApp Business. Extraído do padrão usado
+  no `rh-pontoe` pra avisar candidato de processo seletivo.
+
+- `@edukern/toolkit/pix-copy-paste` — `buildPixCopyPaste({ pixKey, merchantName,
+  merchantCity, amount?, txid? })` monta o payload "Pix copia e cola" (EMV/BR
+  Code do Bacen) sem nenhuma API de pagamento — o cliente cola no app do banco
+  e paga na hora. `merchantName`/`merchantCity` são truncados em 25/15
+  caracteres (limite do próprio formato EMV, não escolha arbitrária).
+- `@edukern/toolkit/calendar-invite` — `buildGoogleCalendarLink(event)` (link
+  `calendar.google.com/render` pré-preenchido, sem OAuth) e `buildIcsFile(event)`
+  (arquivo `.ics` RFC 5545 pra Outlook/Apple Calendar). Mesmo espírito do
+  `whatsapp-link`: URL/arquivo determinístico, sem servidor.
+- `@edukern/toolkit/br-formatters` — `isValidCpf`/`formatCpf`,
+  `isValidCnpj`/`formatCnpj` (dígito verificador módulo 11, aceitam entrada
+  com ou sem pontuação) e `formatBrPhone` (fixo/celular). Formatação de moeda
+  não entrou — `Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'})`
+  nativo já resolve, sem precisar de wrapper.
 - `@edukern/toolkit/design-tokens.css` — esqueleto de design tokens (Tailwind
   v4 `@theme`): nomes semânticos de cor/tipografia/sombra/raio, padrão de tema
   escuro, sem valores de marca (tem placeholders tipo `SUA_FONTE_TITULO` de

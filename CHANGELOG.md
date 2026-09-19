@@ -6,6 +6,16 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 
 ## v0.4.0
 
+- feat: `whatsapp-link` — `buildWhatsAppLink(phone, message)` monta link
+  `wa.me` com mensagem pré-preenchida, sem API paga do WhatsApp Business.
+  Padrão real do `rh-pontoe` (aviso de candidato de processo seletivo).
+- feat: `pix-copy-paste` — `buildPixCopyPaste()` monta o "Pix copia e cola"
+  (BR Code EMV) sem API de pagamento.
+- feat: `calendar-invite` — `buildGoogleCalendarLink()` + `buildIcsFile()`,
+  convite de calendário pré-preenchido sem OAuth.
+- feat: `br-formatters` — validação/formatação de CPF, CNPJ e telefone BR.
+- docs: `_visual/interaction-patterns.md` — padrão "hover revela detalhe" e
+  "compartilhar nativo (Web Share API) com fallback".
 - feat: `design-tokens.css` — primeira peça de front-end do toolkit (as
   demais eram lógica de infra/auth). Esqueleto de design tokens Tailwind v4
   (`@theme`: cor, tipografia, sombra, raio + padrão de tema escuro), sem
