@@ -212,3 +212,40 @@ menu/login que comparam telas inteiras) — decisão consistente: toda tela
 
 Todos os 3 testados no browser, as direções alternam certo. Aguardando o
 usuário escolher em cada um.
+
+**2026-09-19, usuário pediu opinião sincera sobre os 3 — e os fechou
+todos.** Pedido explícito: "me dê sua opinião sincera", diferente do
+padrão anterior de só apresentar opções neutras. Minha recomendação (dada
+e confirmada):
+
+- **Listagem:** A (tabela densa) padrão, B (cards) secundária só pra
+  entidades com identidade visual (pessoa, equipe — não lançamento
+  financeiro). C (kanban) não é uma "direção de lista" — é uma view
+  especializada de fluxo de trabalho, fica de fora da decisão de listagem
+  base.
+- **Detalhe:** C (scroll único) padrão. B (painel lateral) tinha bug real
+  de posicionamento — o usuário testou no navegador de verdade dele
+  (`_visual/detail-catalog.html` aberto localmente, não o painel do
+  Claude Code) e viu o painel flutuando sem encostar nas bordas. Causa:
+  `position:relative` inline no `<div class="dirpane dim-list">` (altura
+  = só conteúdo) em vez de deixar `.main` (que estica full-height via
+  flexbox) ser o contexto de posicionamento. Corrigido removendo o
+  inline duplicado, confirmado a 1400px de largura. Mesmo corrigido, o
+  usuário disse que não gosta do padrão painel lateral por preferência
+  pessoal — vale lembrar disso em catálogos futuros (não sugerir drawer
+  como padrão de novo sem que ele peça).
+- **Formulário:** mantido como estava — A (wizard) pra criar, C
+  (acordeão) pra editar, momentos diferentes, não concorrentes. Trouxe
+  uma referência real: o formulário que candidatos preenchem no
+  `rh-pontoe` é bom exemplo a olhar quando for desenhar o formulário de
+  verdade — ainda não conferido, `rh-pontoe` não estava aberto nesta
+  sessão.
+
+**Achado de processo importante:** o painel do navegador embutido no
+Claude Code (screenshot de um viewport pequeno) não é suficiente pra
+avaliar visual/UX de verdade — já rendeu um falso-negativo aqui (eu não
+vi o bug do painel lateral nos meus próprios testes, só apareceu quando o
+usuário abriu o arquivo no navegador de verdade dele). Pra qualquer
+julgamento visual fino daqui pra frente, vale considerar pedir pro
+usuário abrir o arquivo localmente em vez de confiar só no screenshot do
+painel interno.

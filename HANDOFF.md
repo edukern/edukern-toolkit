@@ -43,25 +43,35 @@
    - **Lembrete confirmado com o usuário:** todo molde do catálogo
      (menu, dashboard, login) é ponto de partida estrutural pra
      adaptar por projeto, não implementação final pronta pra importar.
-4. **Três novos catálogos criados a partir de um brainstorm de telas
-   restantes (usuário pediu ideação livre): listagem, detalhe de
-   registro, formulário complexo.** Todos reaproveitam o shell da
-   sidebar já fechado (igual dashboard), testados no browser, os 3
-   direções de cada um alternam certo. **Aguardando o usuário escolher em
-   cada um** (mesmo padrão: escolha define o que vira base, não elimina
-   as outras — a menos que ele peça, como fez no login).
-   - `_visual/listing-catalog.html` — tela mais repetida entre os 5
-     projetos reais (funcionários, lançamentos, equipes, estoque). A
-     tabela densa (Ponto E), B grade de cards (mundialito), C agrupado
-     por status/kanban (terceira direção, sem persona fixa).
-   - `_visual/detail-catalog.html` — abrir 1 registro. A página cheia com
-     abas, B painel lateral (drawer) sobre a lista esmaecida ao fundo, C
-     scroll único com seções empilhadas.
-   - `_visual/form-catalog.html` — cadastro com bastante campo (os
-     catálogos anteriores só tinham forms de 3 campos). A wizard por
-     etapas com indicador de progresso, B página única longa com seções
-     espaçadas (mundialito), C acordeão com seções recolhíveis (bom pra
-     editar um registro já existente, não só criar um novo).
+4. **Listagem, detalhe e formulário — os 3 fechados.**
+   - **Listagem fechada:** A (tabela densa) é o padrão. B (grade de
+     cards) mantida como secundária, só pra entidades onde a identidade
+     visual do item importa (funcionário, equipe — não lançamento
+     financeiro). C (kanban) não faz parte da decisão de listagem — vira
+     uma view especializada futura ("ver por status"), não um estilo de
+     lista genérico.
+   - **Detalhe fechado — C (scroll único) é o padrão**, A (abas) mantida
+     como alternativa pra registros com muita informação distinta
+     (documentos, histórico extenso). B (painel lateral) tinha um bug
+     real de posicionamento — o usuário viu no navegador de verdade
+     (`_visual/detail-catalog.html` aberto localmente) e o painel
+     aparecia flutuando, sem encostar nas bordas. Causa: o
+     `position:relative` estava no `<div class="dirpane dim-list">`
+     (altura = só o conteúdo, curta) em vez de `.main` (que já tinha
+     `position:relative` e estica pra altura cheia via flexbox) —
+     corrigido removendo o `position:relative` inline duplicado.
+     Confirmado corrigido a 1400px de largura. Mesmo com o bug corrigido,
+     o usuário disse que não gosta do padrão painel lateral por preferência
+     pessoal — não é só o bug. B segue no arquivo, sem o bug, mas não foi
+     escolhida.
+   - **Formulário mantido como estava:** A (wizard) pra criar um registro
+     novo, C (acordeão) pra editar um existente — usos diferentes, não
+     concorrentes, igual ao raciocínio do login. B (página única) como
+     fallback neutro.
+   - Referência real trazida pelo usuário: o formulário que candidatos
+     preenchem no `rh-pontoe` é um bom exemplo a olhar quando for
+     desenhar o formulário de verdade (não conferido ainda nesta sessão
+     — `rh-pontoe` não estava aberto).
 5. **Migração do `mundialito`** — revisão de impacto já aprovou com
    ressalvas. Não fazer durante a janela do torneio. Ao retomar,
    prototipar a composição de `createAccessGate()` DENTRO do `lib/auth/*`
