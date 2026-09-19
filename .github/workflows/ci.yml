@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: dist/ commitado precisa bater com o build
+        run: |
+          if ! git diff --exit-code -- dist; then
+            echo "::error::dist/ está desatualizado em relação ao src/ — rode 'npm run build' e commite o resultado antes de mergear/taguear."
+            exit 1
+          fi
