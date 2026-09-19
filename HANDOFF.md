@@ -52,12 +52,22 @@
      diferente da atual). Decisão de design em aberto, não tarefa pendente.
    - ~~Sem `CHANGELOG.md`~~ — **resolvido** (`CHANGELOG.md` na raiz, uma
      entrada por tag desde v0.1.0).
-   - **Cluster #1 (portão de acesso, o de maior valor do audit original)
-     só existe como peças soltas** (`signed-session` + `session-cookie` +
-     `secure-cookie-option` + `timing-safe-compare`), sem um
-     `createAccessGate()` que as una. Ainda pendente: toca módulo
-     compartilhado de auth, exige `revisor-impacto` antes de implementar
-     (regra do `CLAUDE.md` deste repo) — próximo passo real.
+   - ~~Cluster #1 sem `createAccessGate()` composto~~ — **`revisor-impacto`
+     rodou em 2026-09-19, veredito: NÃO implementar ainda.** Risco P1: o
+     shape esboçado não cabe no único consumidor real que justificaria a
+     abstração (`mundialito`) — `verifyCode(input, expected)` não cobre os
+     3 candidatos de código + lookup no Supabase que o `lib/auth/verify-code.ts`
+     real precisa, e `maxAge` fixo na construção do gate reintroduziria um
+     bug de produção **já corrigido e documentado** no próprio mundialito
+     (`lib/auth/cookie.ts:10-15`: sessão de 12h pra quem devia ter 7 dias e
+     vice-versa, porque a validade depende do papel, não é um valor único
+     por instância). Decisão: esperar a migração do mundialito (item 1)
+     revelar o shape real antes de extrair qualquer composição — extrair de
+     um esboço isolado, sem 2º caso real, é abstração prematura. Quando a
+     migração do mundialito for retomada, prototipar a composição **dentro**
+     do `lib/auth/*` dele primeiro; só depois extrair pro toolkit o que
+     sobrar. Detalhe completo (cadeia de impacto, checklist) na memória do
+     audit.
 5. **Clusters #3/#4 do scan original** (tokens de design — já resolvido de
    outro jeito, não é candidato; `dnd-kit`/`react-pdf` — precisa desenho, não
    é extração mecânica).
