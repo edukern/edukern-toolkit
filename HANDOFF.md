@@ -7,24 +7,30 @@
 
 ## ⏳ Pendente
 
-1. **Aguardando o usuário escolher uma direção em `_visual/menu-catalog.html`**
-   (ou pedir mix entre elas). São 3 direções lado a lado — A: sidebar densa
-   (família Ponto E), B: topbar espaçosa (mundialito), C: rail colapsável +
-   command bar — cada uma já com 2 páginas de exemplo (Visão geral e
-   Cadastro) atrás do mesmo menu, e os sliders Densidade/Escala tipo
-   (`--sp`/`--ts`, mesmo mecanismo do `explorer.html`) ajustando as 3 ao
-   mesmo tempo para comparação direta.
-   - **Próximo passo depois da escolha:** desenhar o sistema de
-     tokens/estrutura real a partir da direção escolhida. Cor e tipografia
-     continuam FORA do catálogo (variam por projeto, decisão explícita já
-     registrada) — o eixo é só estrutura + densidade/peso.
-   - **Regra dos 3 ainda vale:** não generalizar esse formato pra outras
-     telas (dashboard, login, etc.) até esse 1 caso (menu) fechar de
-     verdade com uma direção escolhida e usada em algo real.
-   - Decisão de formato tomada durante a construção: cada direção do
-     catálogo deve mostrar o menu dentro de ≥2 tipos de página (não uma
-     tela isolada) — vale repetir esse padrão se/quando o catálogo
-     generalizar pra outras telas.
+1. **Direção C (rail/sidebar colapsável) escolhida como base real** —
+   ver `_visual/sidebar-collapsible.html`. Escuro, colapsa de verdade
+   (ícone-only ↔ ícone+label via botão), sem command bar (usuário não
+   tinha certeza se precisava — tirado por YAGNI, adicionar se fizer
+   falta). Densidade/escala mantidas no padrão do catálogo (`--sp:1`/
+   `--ts:1.15`) — usuário pediu explicitamente pra NÃO reduzir o
+   espaçamento que já estava na direção C original.
+   - A (sidebar densa/Ponto E) e B (topbar espaçosa/mundialito)
+     **não foram descartadas** — continuam em `_visual/menu-catalog.html`
+     como alternativas pra projetos que combinem mais com elas. Escolher
+     C não significa "vencedora única", só define o que vira sistema de
+     verdade primeiro.
+   - **Próximo passo:** promover `sidebar-collapsible.html` de mockup
+     standalone pra estrutura reaproveitável de verdade (provavelmente
+     junto de `design-tokens.css`, já que cor/tipografia ficam fora por
+     decisão — o que falta é a ESTRUTURA: rail/sidebar + shell de
+     página). Ainda não decidido se isso vira CSS puro (como os tokens)
+     ou exige componente React — depende de como o item 2 do
+     `project_frontend_scope.md` (Button/Card, hoje rejeitado pela regra
+     dos 3) evoluir.
+   - **Regra dos 3 ainda vale:** não generalizar esse formato de catálogo
+     pra outras telas (dashboard, login, etc.) até esse 1 caso (menu)
+     fechar de verdade — a escolha da direção fechou, falta promover pra
+     estrutura real.
 2. **Migração do `mundialito`** — revisão de impacto já aprovou com
    ressalvas. Não fazer durante a janela do torneio. Ao retomar,
    prototipar a composição de `createAccessGate()` DENTRO do `lib/auth/*`

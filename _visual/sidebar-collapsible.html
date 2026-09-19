@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sidebar colapsável — direção escolhida</title>
+<!--
+  Versão refinada da direção C do _visual/menu-catalog.html (rail + command
+  bar), depois da escolha do usuário: sidebar escuro, colapsável de verdade
+  (ícone-only <-> ícone+label), sem command bar. Densidade/escala tipo
+  mantidas nos valores padrão do catálogo (--sp:1 / --ts:1.15) — o usuário
+  pediu explicitamente pra não reduzir o espaçamento que já estava ali.
+  A e B do catálogo continuam como alternativas pra outros projetos, não
+  foram descartadas.
+-->
+<style>
+  :root {
+    --canvas: oklch(0.96 0.004 250); --surface: oklch(0.995 0.002 250); --fill: oklch(0.93 0.006 250);
+    --ink: oklch(0.28 0.006 250); --ink-muted: oklch(0.5 0.006 250); --ink-faint: oklch(0.64 0.005 250);
+    --accent: oklch(0.32 0.01 250); --accent-ink: oklch(0.98 0.002 250); --line: oklch(0.87 0.006 250);
+    --rail-bg: oklch(0.22 0.006 250); --rail-ink: oklch(0.7 0.006 250); --rail-ink-active: oklch(0.98 0.002 250);
+    --radius: 10px; --shadow: 0 10px 30px rgba(0,0,0,.06); --sp: 1; --ts: 1.15;
+    --rail-w-collapsed: 60px; --rail-w-expanded: 208px;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, sans-serif; background:#e9e9e6; color:var(--ink); }
+  main.wrap { padding:32px; max-width:1000px; margin:0 auto; }
+  .screen { border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--canvas); box-shadow:var(--shadow); display:flex; min-height:520px; }
+
+  .rail { width:var(--rail-w-collapsed); background:var(--rail-bg); display:flex; flex-direction:column; padding:calc(14px*var(--sp)) 0; flex-shrink:0; transition:width .18s ease; overflow:hidden; }
+  .rail.expanded { width:var(--rail-w-expanded); }
+  .rail-brand { display:flex; align-items:center; gap:12px; padding:0 calc(15px*var(--sp)) calc(18px*var(--sp)); white-space:nowrap; }
+  .rail-brand .mark { width:26px; height:26px; border-radius:7px; background:var(--rail-ink-active); color:var(--rail-bg); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+  .rail-brand .name { color:var(--rail-ink-active); font-weight:700; font-size:14px; opacity:0; transition:opacity .12s ease; }
+  .rail.expanded .rail-brand .name { opacity:1; }
+  .rail-nav { flex:1; display:flex; flex-direction:column; gap:2px; }
+  .rail-item { display:flex; align-items:center; gap:12px; padding:calc(9px*var(--sp)) calc(15px*var(--sp)); color:var(--rail-ink); text-decoration:none; white-space:nowrap; border-radius:8px; margin:0 8px; font-size:calc(13px*var(--ts)); }
+  .rail-item .ic { width:20px; flex-shrink:0; text-align:center; }
+  .rail-item .lbl { opacity:0; transition:opacity .12s ease; }
+  .rail.expanded .rail-item .lbl { opacity:1; }
+  .rail-item.active { background:rgba(255,255,255,.1); color:var(--rail-ink-active); font-weight:600; }
+  .rail-toggle { display:flex; align-items:center; gap:12px; padding:calc(9px*var(--sp)) calc(15px*var(--sp)); margin:0 8px; color:var(--rail-ink); background:none; border:none; cursor:pointer; border-radius:8px; font:inherit; font-size:calc(13px*var(--ts)); white-space:nowrap; }
+  .rail-toggle:hover { background:rgba(255,255,255,.06); }
+  .rail-toggle .ic { width:20px; flex-shrink:0; text-align:center; transition:transform .18s ease; }
+  .rail.expanded .rail-toggle .ic { transform:rotate(180deg); }
+  .rail-toggle .lbl { opacity:0; transition:opacity .12s ease; }
+  .rail.expanded .rail-toggle .lbl { opacity:1; }
+
+  .main { flex:1; padding:calc(20px*var(--sp)); min-width:0; }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:calc(16px*var(--sp)); }
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:calc(12px*var(--sp)); margin-bottom:calc(16px*var(--sp)); }
+  .stat .l { font-size:11px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.05em; margin:0 0 6px; }
+  .stat .n { font-size:calc(20px*var(--ts)); font-weight:700; margin:0; }
+  .list .row { display:flex; justify-content:space-between; align-items:center; padding:calc(9px*var(--sp)) 0; border-bottom:1px solid var(--line); font-size:13px; }
+  .list .row:last-child { border-bottom:0; }
+  .badge { font-size:11px; font-weight:600; padding:2px 9px; border-radius:999px; background:color-mix(in oklab, var(--accent) 12%, transparent); color:var(--accent); }
+  h3.title { font-size:calc(16px*var(--ts)); margin:0 0 calc(12px*var(--sp)); }
+  .tabs { display:flex; gap:8px; margin-bottom:calc(14px*var(--sp)); }
+  .tabs button { font:inherit; font-size:12px; border:1px solid var(--line); background:var(--surface); color:var(--ink-muted); border-radius:999px; padding:5px 14px; cursor:pointer; }
+  .tabs button.active { background:var(--ink); color:var(--surface); border-color:var(--ink); }
+  .field { margin-bottom:calc(12px*var(--sp)); }
+  .field label { display:block; font-size:12px; color:var(--ink); margin-bottom:4px; font-weight:500; }
+  .field input { width:100%; border:1px solid var(--line); background:var(--surface); border-radius:var(--radius); padding:calc(8px*var(--sp)) calc(10px*var(--sp)); font:inherit; color:var(--ink); }
+  .btn-primary { font:inherit; font-weight:600; border:none; border-radius:var(--radius); padding:calc(9px*var(--sp)) calc(18px*var(--sp)); background:var(--accent); color:var(--accent-ink); cursor:pointer; }
+</style>
+</head>
+<body>
+
+<main class="wrap">
+  <div class="screen">
+    <aside class="rail" id="rail">
+      <div class="rail-brand"><span class="mark">E</span><span class="name">Edukern</span></div>
+      <nav class="rail-nav">
+        <a class="rail-item active"><span class="ic">⌂</span><span class="lbl">Visão geral</span></a>
+        <a class="rail-item"><span class="ic">▤</span><span class="lbl">Lançamentos</span></a>
+        <a class="rail-item"><span class="ic">☰</span><span class="lbl">Colaboradores</span></a>
+        <a class="rail-item"><span class="ic">⚙</span><span class="lbl">Configurações</span></a>
+      </nav>
+      <button class="rail-toggle" id="toggle"><span class="ic">»</span><span class="lbl">Recolher</span></button>
+    </aside>
+    <div class="main">
+      <div class="tabs"><button class="active" data-page="overview">Visão geral</button><button data-page="form">Cadastro</button></div>
+      <div class="page" data-page="overview">
+        <h3 class="title">Visão geral</h3>
+        <div class="stats">
+          <div class="card stat"><p class="l">Lançamentos</p><p class="n">128</p></div>
+          <div class="card stat"><p class="l">Pendentes</p><p class="n">12</p></div>
+          <div class="card stat"><p class="l">Saldo</p><p class="n">R$ 4,2k</p></div>
+        </div>
+        <div class="card list">
+          <div class="row"><span>Ana Powers</span><span class="badge">Confirmado</span></div>
+          <div class="row"><span>Bruno Lima</span><span class="badge">Pendente</span></div>
+          <div class="row"><span>Carla Reis</span><span class="badge">Confirmado</span></div>
+        </div>
+      </div>
+      <div class="page" data-page="form" hidden>
+        <h3 class="title">Novo colaborador</h3>
+        <div class="card" style="max-width:340px">
+          <div class="field"><label>Nome</label><input placeholder="Nome completo"></div>
+          <div class="field"><label>E-mail</label><input placeholder="voce@empresa.com"></div>
+          <div class="field"><label>Cargo</label><input placeholder="Cargo"></div>
+          <button class="btn-primary">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  document.getElementById('toggle').onclick = () => document.getElementById('rail').classList.toggle('expanded');
+  document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+    const screen = b.closest('.screen');
+    screen.querySelectorAll('.tabs button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    screen.querySelectorAll('.page').forEach(p => p.hidden = p.dataset.page !== b.dataset.page);
+  });
+</script>
+</body>
+</html>

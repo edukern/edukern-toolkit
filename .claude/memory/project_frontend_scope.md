@@ -92,3 +92,21 @@ mesmo padrão de tokens CSS + `--sp`/`--ts`. Interativo funciona no browser
 pane mesmo fora da pasta raiz do projeto (worktree) — confirmado ao vivo,
 diferente do aviso antigo sobre o explorer.html (que pode já estar
 desatualizado, vale reconferir se aparecer de novo).
+
+**2026-09-19, direção escolhida:** usuário gostou da C (rail/sidebar
+colapsável). Correção de enquadramento importante que aconteceu aqui: eu
+apresentei a escolha como "qual das 3 vence" e o usuário reagiu — a
+intenção dele nunca foi eliminar A/B, só decidir qual vira sistema de
+verdade primeiro. "Escolher uma direção" (linguagem do HANDOFF antigo)
+significa ordem de construção, não descarte das outras. Ajustar esse
+enquadramento em qualquer decisão futura do tipo "escolha entre opções
+geradas" — perguntar/expor como priorização, não eliminação, a menos que o
+usuário diga explicitamente que quer descartar as não-escolhidas.
+
+Ajustes que o usuário pediu sobre a direção C: escuro (já era) e SEM
+reduzir a densidade/espaçamento que já estava ali — ele testou a ideia de
+"menos espaçoso" e recuou, preferiu manter o espaçamento original do
+catálogo. Sem certeza se precisa de command bar — tirado por ora (YAGNI),
+documentar se pedir de volta. Resultado: `_visual/sidebar-collapsible.html`,
+com toggle de verdade (ícone-only ↔ ícone+label), não só um rail estático
+como a direção C original do catálogo.
