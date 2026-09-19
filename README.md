@@ -67,6 +67,11 @@ de verdade (`@supabase/ssr` + `supabase.auth.getUser()`, como o `game-box`)
 não tem o que fazer com esses dois módulos — nesse caso só `supabase-client` e
 `timing-safe-compare` se aplicam, se aplicarem.
 
+## Pegadinhas que não viraram código
+
+Bug/trap de infra, ferramenta ou arquitetura que não dá pra empacotar em função —
+só tem que lembrar na hora certa. Ver `PEGADINHAS.md`.
+
 ## Desenvolvimento
 
 ```bash
