@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Catálogo de login — direções estruturais</title>
+<!--
+  Terceiro caso do catálogo de telas por direção estrutural (ver
+  HANDOFF.md e .claude/memory/project_frontend_scope.md). Diferente do
+  dashboard, login não herda o shell da sidebar (é a tela ANTES do app
+  autenticado) — por isso volta ao formato de comparar telas inteiras,
+  como o catálogo do menu. Cor e tipografia seguem fora de propósito.
+-->
+<style>
+  :root {
+    --canvas: oklch(0.96 0.004 250); --surface: oklch(0.995 0.002 250);
+    --ink: oklch(0.28 0.006 250); --ink-muted: oklch(0.5 0.006 250); --ink-faint: oklch(0.64 0.005 250);
+    --accent: oklch(0.32 0.01 250); --accent-ink: oklch(0.98 0.002 250); --line: oklch(0.87 0.006 250);
+    --dark: oklch(0.22 0.006 250); --dark-ink: oklch(0.9 0.006 250);
+    --radius: 10px; --shadow: 0 10px 30px rgba(0,0,0,.06); --sp: 1; --ts: 1.15;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, sans-serif; background:#e9e9e6; color:var(--ink); }
+  .controls { position:sticky; top:0; z-index:10; background:#1d1d1b; color:#fff; padding:14px 24px; display:flex; align-items:center; gap:28px; flex-wrap:wrap; }
+  .controls h1 { font-size:14px; font-weight:600; margin:0; text-transform:uppercase; letter-spacing:.06em; }
+  .controls .hint { font-size:12px; color:#bbb; margin:0; flex-basis:100%; }
+  .slider { display:flex; align-items:center; gap:8px; font-size:12px; }
+  .slider input { width:140px; }
+  .slider .val { width:40px; color:#bbb; }
+  main.wrap { padding:32px; max-width:1080px; margin:0 auto; }
+
+  .dirtabs { display:flex; gap:8px; margin-bottom:16px; }
+  .dirtabs button { font:inherit; font-size:13px; font-weight:600; border:1px solid var(--line); background:var(--surface); color:var(--ink-muted); border-radius:999px; padding:7px 18px; cursor:pointer; }
+  .dirtabs button.active { background:var(--ink); color:var(--surface); border-color:var(--ink); }
+  .dirlabel { font-size:12px; color:#555; margin:0 0 20px; }
+
+  .screen { border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--canvas); box-shadow:var(--shadow); min-height:520px; }
+
+  .field { margin-bottom:calc(14px*var(--sp)); text-align:left; }
+  .field label { display:block; font-size:12px; color:var(--ink); margin-bottom:4px; font-weight:500; }
+  .field input { width:100%; border:1px solid var(--line); background:var(--surface); border-radius:var(--radius); padding:calc(9px*var(--sp)) calc(12px*var(--sp)); font:inherit; color:var(--ink); }
+  .btn-primary { width:100%; font:inherit; font-weight:600; border:none; border-radius:var(--radius); padding:calc(10px*var(--sp)) calc(18px*var(--sp)); background:var(--accent); color:var(--accent-ink); cursor:pointer; margin-top:calc(4px*var(--sp)); }
+  .aux-row { display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom:calc(16px*var(--sp)); }
+  .aux-row a { color:var(--ink-muted); text-decoration:none; }
+  .aux-row label { display:flex; align-items:center; gap:6px; color:var(--ink-muted); }
+
+  /* ── A: card denso centralizado (Ponto E) ── */
+  .dir-a { display:flex; align-items:center; justify-content:center; min-height:520px; padding:calc(24px*var(--sp)); }
+  .dir-a .card { width:100%; max-width:300px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:calc(28px*var(--sp)) calc(26px*var(--sp)); }
+  .dir-a .mark { width:32px; height:32px; border-radius:8px; background:var(--ink); color:var(--surface); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; margin:0 0 calc(14px*var(--sp)); }
+  .dir-a h2 { font-size:calc(16px*var(--ts)); margin:0 0 calc(18px*var(--sp)); }
+
+  /* ── B: split screen (mundialito) ── */
+  .dir-b { display:flex; min-height:520px; }
+  .dir-b .brand-panel { flex:1.1; background:linear-gradient(160deg, var(--dark), oklch(0.3 0.02 250)); color:var(--dark-ink); padding:calc(44px*var(--sp)); display:flex; flex-direction:column; justify-content:center; }
+  .dir-b .brand-panel .eyebrow { font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:oklch(0.7 0.02 250); margin:0 0 12px; }
+  .dir-b .brand-panel h2 { font-size:calc(30px*var(--ts)); margin:0 0 14px; line-height:1.2; }
+  .dir-b .brand-panel p { color:oklch(0.75 0.02 250); line-height:1.6; max-width:340px; margin:0; }
+  .dir-b .form-panel { flex:1; display:flex; align-items:center; justify-content:center; padding:calc(44px*var(--sp)); }
+  .dir-b .form-panel form { width:100%; max-width:340px; }
+  .dir-b h3 { font-size:calc(20px*var(--ts)); margin:0 0 calc(22px*var(--sp)); }
+
+  /* ── C: minimalista full-bleed (terceira direção, passwordless) ── */
+  .dir-c { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:520px; padding:calc(24px*var(--sp)) calc(20px*var(--sp)); text-align:center; }
+  .dir-c .mark { width:40px; height:40px; border-radius:12px; background:var(--ink); color:var(--surface); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px; margin:0 auto calc(20px*var(--sp)); }
+  .dir-c h2 { font-size:calc(24px*var(--ts)); margin:0 0 calc(8px*var(--sp)); }
+  .dir-c p.sub { color:var(--ink-muted); margin:0 0 calc(28px*var(--sp)); font-size:14px; }
+  .dir-c form { width:100%; max-width:320px; text-align:left; }
+  .dir-c .hint-small { font-size:11px; color:var(--ink-faint); margin-top:calc(12px*var(--sp)); }
+
+  .dir-a[hidden], .dir-b[hidden], .dir-c[hidden] { display:none; }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <h1>Densidade &amp; escala</h1>
+  <div class="slider"><label>Densidade</label><input id="dens" type="range" min="0.8" max="1.4" step="0.05" value="1"><span class="val" id="densV">1.00</span></div>
+  <div class="slider"><label>Escala tipo</label><input id="tscale" type="range" min="1" max="1.7" step="0.05" value="1.15"><span class="val" id="tscaleV">1.15</span></div>
+  <p class="hint">Login não herda o shell autenticado (menu/dashboard) — é a tela antes do login. Cor e fonte fora de propósito.</p>
+</div>
+
+<main class="wrap">
+  <div class="dirtabs">
+    <button class="active" data-dir="a">A — Card denso centralizado</button>
+    <button data-dir="b">B — Split screen</button>
+    <button data-dir="c">C — Minimalista</button>
+  </div>
+  <p class="dirlabel" id="dirlabel">Inspirado em financeiro-ponto-e / rh-pontoe / ponto-e-stock: card compacto, direto ao ponto, sem elementos de marca além do logo.</p>
+
+  <div class="screen">
+    <!-- A -->
+    <div class="dir-a" data-dir="a">
+      <div class="card">
+        <div class="mark">E</div>
+        <h2>Entrar</h2>
+        <form>
+          <div class="field"><label>E-mail</label><input placeholder="voce@empresa.com"></div>
+          <div class="field"><label>Senha</label><input type="password" placeholder="••••••••"></div>
+          <div class="aux-row"><label><input type="checkbox">Manter conectado</label><a>Esqueci a senha</a></div>
+          <button class="btn-primary" type="button">Entrar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- B -->
+    <div class="dir-b" data-dir="b" hidden>
+      <div class="brand-panel">
+        <p class="eyebrow">Mundialito</p>
+        <h2>Organize seu torneio do início ao fim.</h2>
+        <p>Inscrições, chaveamento e resultados em um só lugar, pensado para quem organiza e para quem joga.</p>
+      </div>
+      <div class="form-panel">
+        <form>
+          <h3>Bem-vindo de volta</h3>
+          <div class="field"><label>E-mail</label><input placeholder="voce@email.com"></div>
+          <div class="field"><label>Senha</label><input type="password" placeholder="••••••••"></div>
+          <div class="aux-row"><label><input type="checkbox">Manter conectado</label><a>Esqueci a senha</a></div>
+          <button class="btn-primary" type="button">Entrar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- C -->
+    <div class="dir-c" data-dir="c" hidden>
+      <div class="mark">E</div>
+      <h2>Acesse sua conta</h2>
+      <p class="sub">Sem senha — enviamos um link de acesso pro seu e-mail.</p>
+      <form>
+        <div class="field"><label>E-mail</label><input placeholder="voce@email.com"></div>
+        <button class="btn-primary" type="button">Enviar link de acesso</button>
+        <p class="hint-small">Prefere senha? <a href="#" style="color:var(--ink-muted)">Entrar de outro jeito</a></p>
+      </form>
+    </div>
+  </div>
+</main>
+
+<script>
+  const root = document.documentElement.style;
+  const dens = document.getElementById('dens'), densV = document.getElementById('densV');
+  const tscale = document.getElementById('tscale'), tscaleV = document.getElementById('tscaleV');
+  dens.oninput = () => { root.setProperty('--sp', dens.value); densV.textContent = (+dens.value).toFixed(2); };
+  tscale.oninput = () => { root.setProperty('--ts', tscale.value); tscaleV.textContent = (+tscale.value).toFixed(2); };
+
+  const labels = {
+    a: 'Inspirado em financeiro-ponto-e / rh-pontoe / ponto-e-stock: card compacto, direto ao ponto, sem elementos de marca além do logo.',
+    b: 'Inspirado no mundialito: painel de marca com mensagem editorial de um lado, formulário espaçoso do outro.',
+    c: 'Terceira direção, sem persona fixa: minimalista, sem card, fluxo passwordless (link de acesso por e-mail) em vez de senha.'
+  };
+  document.querySelectorAll('.dirtabs button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.dirtabs button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    const dir = b.dataset.dir;
+    document.querySelectorAll('.dir-a, .dir-b, .dir-c').forEach(d => d.hidden = d.dataset.dir !== dir);
+    document.getElementById('dirlabel').textContent = labels[dir];
+  });
+</script>
+</body>
+</html>

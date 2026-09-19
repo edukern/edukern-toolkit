@@ -21,27 +21,42 @@
    6 indicadores + tabela de atividade), testado no browser. B (narrativo/
    mundialito) e C (operacional em tabela) continuam em
    `_visual/dashboard-catalog.html` como alternativas, não descartadas.
-   - Próximas telas candidatas: login, central de ajuda (que já tem a
-     skill `central-ajuda` pronta — avaliar se cobre o caso antes de
-     duplicar esforço aqui).
-3. **Migração do `mundialito`** — revisão de impacto já aprovou com
+3. **Terceiro caso do catálogo, em andamento: login.**
+   `_visual/login-catalog.html` — login não herda o shell autenticado
+   (é a tela antes dele), por isso volta ao formato de comparar telas
+   inteiras, como o catálogo do menu. 3 direções: A card denso centralizado
+   (Ponto E), B split screen com painel de marca (mundialito), C
+   minimalista passwordless (terceira direção, sem persona fixa — link de
+   acesso por e-mail em vez de senha). Testado no browser (achei e
+   corrigi um bug real: `hidden` não escondia as direções B/C porque
+   `.dir-a/.dir-b/.dir-c` setavam `display:flex` direto na mesma classe
+   usada pro toggle — corrigido com `[hidden]{display:none}` explícito;
+   vale checar esse padrão se aparecer de novo em catálogos futuros).
+   **Aguardando o usuário escolher.**
+   - Próxima tela candidata depois: central de ajuda (já tem a skill
+     `central-ajuda` pronta — avaliar se cobre o caso antes de duplicar
+     esforço aqui).
+   - **Lembrete confirmado com o usuário:** todo molde do catálogo
+     (menu, dashboard, login) é ponto de partida estrutural pra
+     adaptar por projeto, não implementação final pronta pra importar.
+4. **Migração do `mundialito`** — revisão de impacto já aprovou com
    ressalvas. Não fazer durante a janela do torneio. Ao retomar,
    prototipar a composição de `createAccessGate()` DENTRO do `lib/auth/*`
    do mundialito primeiro (revisor-impacto vetou extrair pro toolkit de um
    esboço isolado — ver `project_personal_library_audit.md`).
-4. **Buracos de teste na cola:** `setSignedCookie`/`clearSignedCookie`/
+5. **Buracos de teste na cola:** `setSignedCookie`/`clearSignedCookie`/
    `readSignedCookie` (`session-cookie.ts`) continuam sem teste —
    `next/headers` não resolve fora do bundler do Next, nem com
    `mock.module`. Fechar de verdade exige (a) teste de integração dentro
    de uma app Next real, ou (b) mudar `session-cookie.ts` pra aceitar um
    cookie store injetável. Decisão de design em aberto, não é só "faltou
    tentar".
-5. **Arquivo duplicado pendente de remoção manual pelo usuário** (bloqueio
+6. **Arquivo duplicado pendente de remoção manual pelo usuário** (bloqueio
    de segurança impediu apagar automaticamente):
    ```bash
    rm "C:/Users/eduke/.claude/templates/design-tokens.css"
    ```
-6. **Bug pequeno encontrado no `design-system-explorer.html`:** o badge de
+7. **Bug pequeno encontrado no `design-system-explorer.html`:** o badge de
    contraste WCAG às vezes trava mostrando `1.00:1`/valores errados em
    todos os pares depois de trocar paleta+arquétipo+fonte em sequência,
    mesmo com o texto visivelmente legível na tela — parece cálculo não

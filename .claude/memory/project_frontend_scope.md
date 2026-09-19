@@ -140,3 +140,30 @@ atividade) — decisão de manter tudo em 1 arquivo evolutivo em vez de
 espalhar em vários arquivos "decisão final" por tela, já que cada tela
 nova reaproveita o shell anterior. B (narrativo) e C (operacional em
 tabela) continuam em `dashboard-catalog.html` como alternativas.
+
+**2026-09-19, terceiro caso: login.** Usuário confirmou explicitamente o
+enquadramento certo do catálogo inteiro: todo molde (menu, dashboard,
+login) é ponto de partida estrutural pra adaptar por projeto — cor,
+fonte, conteúdo real e ajustes finos ficam por conta de cada
+implementação, o catálogo só evita decidir layout do zero toda vez. Vale
+repetir essa frase se o enquadramento ficar confuso de novo no futuro.
+
+Login não reaproveita o shell autenticado (sidebar) — é a tela ANTES do
+login, então o catálogo voltou ao formato "3 telas inteiras lado a lado"
+(como o do menu), não o formato "conteúdo dentro do shell fixo" (como o
+do dashboard). `_visual/login-catalog.html`: A card denso centralizado
+(Ponto E), B split screen com painel de marca (mundialito), C minimalista
+passwordless — link de acesso por e-mail em vez de senha (terceira
+direção, sem persona fixa).
+
+Bug real encontrado e corrigido durante o teste: `hidden` não escondia
+as direções porque `.dir-a`/`.dir-b`/`.dir-c` setavam `display:flex`
+direto na mesma classe usada pro toggle — CSS de autor com display
+explícito sempre vence o `[hidden]{display:none}` do user-agent,
+independente de especificidade/ordem. Corrigido com uma regra
+`[hidden]{display:none}` explícita por cima. Vale desconfiar desse padrão
+(classe com `display` fixo + toggle por atributo `hidden`) em qualquer
+catálogo novo — `dashboard-catalog.html` não teve esse bug porque a
+classe de toggle (`.dir`) não define `display` diretamente.
+
+Aguardando o usuário escolher uma direção.
