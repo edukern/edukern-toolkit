@@ -7,29 +7,24 @@
 
 ## ⏳ Pendente
 
-1. **Próximo passo real: catálogo de exemplos de tela por direção
-   estrutural, começando pelo menu.** Ideia amadureceu nesta sessão (ver
-   `.claude/memory/project_frontend_scope.md`) — não é mais "biblioteca de
-   cor/fonte", é: gerar 2-3 versões de uma MESMA tela, estruturalmente
-   diferentes entre si (não só cor/espaçamento — layout mesmo, ex. menu
-   lateral vs. topo vs. estilo command-palette), o usuário aponta a
-   direção que quer, e só DAÍ o sistema de verdade é desenhado a partir
-   dali. Objetivo: parar de reconstruir do zero a cada projeto.
-   - Escopo combinado: **começar só pelo menu de navegação** (regra dos 3 —
-     provar o formato com 1 caso antes de generalizar pra outras telas).
-   - Duas personas reais já ancoradas pelo usuário, usar como pelo menos 2
-     das direções do menu: **família Ponto E** (financeiro-ponto-e,
-     rh-pontoe, ponto-e-stock) = prático/funcional, densidade alta, pouco
-     ornamento; **mundialito** = mais cuidado esteticamente, mais respiro.
-   - Ideia intermediária de "2 perfis de densidade/peso" (Prático vs.
-     Refinado, baseada nos sliders `Densidade`/`Escala tipo` do explorer)
-     foi levantada e NÃO foi rejeitada, só ficou pra trás quando o usuário
-     pediu algo mais concreto (exemplos de tela reais, não só tokens
-     abstratos). Vale reconsiderar como MECANISMO por trás das direções do
-     menu, não como proposta rival.
-   - Cor e tipografia de fonte ficam de fora desse catálogo — o usuário foi
-     explícito: variam projeto a projeto, não são o eixo de diferenciação
-     aqui. O eixo é estrutura/layout + espaçamento/peso.
+1. **Aguardando o usuário escolher uma direção em `_visual/menu-catalog.html`**
+   (ou pedir mix entre elas). São 3 direções lado a lado — A: sidebar densa
+   (família Ponto E), B: topbar espaçosa (mundialito), C: rail colapsável +
+   command bar — cada uma já com 2 páginas de exemplo (Visão geral e
+   Cadastro) atrás do mesmo menu, e os sliders Densidade/Escala tipo
+   (`--sp`/`--ts`, mesmo mecanismo do `explorer.html`) ajustando as 3 ao
+   mesmo tempo para comparação direta.
+   - **Próximo passo depois da escolha:** desenhar o sistema de
+     tokens/estrutura real a partir da direção escolhida. Cor e tipografia
+     continuam FORA do catálogo (variam por projeto, decisão explícita já
+     registrada) — o eixo é só estrutura + densidade/peso.
+   - **Regra dos 3 ainda vale:** não generalizar esse formato pra outras
+     telas (dashboard, login, etc.) até esse 1 caso (menu) fechar de
+     verdade com uma direção escolhida e usada em algo real.
+   - Decisão de formato tomada durante a construção: cada direção do
+     catálogo deve mostrar o menu dentro de ≥2 tipos de página (não uma
+     tela isolada) — vale repetir esse padrão se/quando o catálogo
+     generalizar pra outras telas.
 2. **Migração do `mundialito`** — revisão de impacto já aprovou com
    ressalvas. Não fazer durante a janela do torneio. Ao retomar,
    prototipar a composição de `createAccessGate()` DENTRO do `lib/auth/*`
@@ -89,6 +84,10 @@
   de estilo → densidade/peso → catálogo de exemplos de tela). Atualizar ao
   retomar.
 - `src/design-tokens.css` — esqueleto de tokens já shippado (v0.4.0).
+- `_visual/menu-catalog.html` — o catálogo em si (3 direções + sliders).
+  Standalone, sem dependência do explorer.html. Abrir no browser pane
+  (funciona interativo mesmo rodando de dentro do worktree/pasta do
+  projeto).
 - `_visual/explorer.html` — cópia do Design System Explorer, já dentro do
   projeto (interativo no browser pane só funciona daqui, não de fora da
   pasta). Tem o bug do item 5 acima.
@@ -101,16 +100,13 @@
 
 ```
 Leia HANDOFF.md em D:\projetos\edukern-toolkit e .claude/memory/project_frontend_scope.md.
-v0.4.0 no ar (design-tokens.css shippado). Próximo passo real: montar um
-catálogo de exemplos de tela por direção ESTRUTURAL (não só cor/fonte,
-layout mesmo), começando pelo menu de navegação — gerar 2-3 versões bem
-diferentes (pelo menos uma no espírito "família Ponto E" = prático/denso,
-uma no espírito "mundialito" = mais refinado/espaçoso), mostrar lado a
-lado, deixar o usuário escolher a direção antes de desenhar o sistema de
-verdade. Cor e fonte ficam FORA do catálogo (variam por projeto). Antes de
-construir: confirmar com o usuário se o mecanismo por trás das direções
-reaproveita os sliders de Densidade/Escala tipo do design-system-explorer.html
-(ideia intermediária levantada, não descartada). Seguir formato de resposta
-do CLAUDE.md global (TL;DR + Preciso de você, sem seção de risco de
-rotina) e explicar o "porquê" de qualquer princípio nomeado aplicado.
+Catálogo de menus pronto em _visual/menu-catalog.html (3 direções: sidebar
+densa/Ponto E, topbar espaçosa/mundialito, rail colapsável+command bar;
+sliders Densidade/Escala tipo ajustam as 3 juntas). Pergunte ao usuário qual
+direção ele escolheu (ou se quer mix) e a partir dali desenhe o sistema de
+tokens/estrutura real do menu. Cor e fonte continuam fora de escopo. Regra
+dos 3: não generalizar o formato de catálogo pra outras telas até esse caso
+fechar. Seguir formato de resposta do CLAUDE.md global (TL;DR + Preciso de
+você, sem seção de risco de rotina) e explicar o "porquê" de qualquer
+princípio nomeado aplicado.
 ```
