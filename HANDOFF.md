@@ -44,12 +44,27 @@
      (menu, dashboard, login) é ponto de partida estrutural pra
      adaptar por projeto, não implementação final pronta pra importar.
 4. **Listagem, detalhe e formulário — os 3 fechados.**
-   - **Listagem fechada:** A (tabela densa) é o padrão. B (grade de
-     cards) mantida como secundária, só pra entidades onde a identidade
-     visual do item importa (funcionário, equipe — não lançamento
-     financeiro). C (kanban) não faz parte da decisão de listagem — vira
-     uma view especializada futura ("ver por status"), não um estilo de
-     lista genérico.
+   - **Listagem — correção importante:** meu primeiro veredito (A padrão,
+     B secundária "só pra identidade visual leve") estava errado. O
+     usuário mostrou um print real do financeiro-ponto-e
+     (`Projeção de vendas por vendedor`) onde o card carrega tanta
+     densidade quanto a tabela: nome, atendimentos + ticket médio, barra
+     de progresso, 2 números (vendido + projeção) e um mini-gráfico
+     "venda por dia" com **hover revelando o detalhe do dia** (evita
+     poluição visual sem perder profundidade de análise). Reconstruí a
+     direção B em `_visual/listing-catalog.html` nesse nível (cards de
+     `Desempenho por vendedor`, gráfico com tooltip via `data-tip` +
+     `content:attr()`, testado no browser). **Não é mais "A padrão / B
+     secundária"** — A (tabela) serve dado tabular simples/operacional,
+     B (card denso) serve quando cada registro já é uma métrica de
+     desempenho por si só — mesmo raciocínio de "usos diferentes, não
+     concorrentes" do formulário/login. C (kanban) segue fora da decisão
+     de listagem, como já estava.
+   - **Padrão de interação anotado (não implementado ainda): hover
+     revelando detalhe.** Vale considerar como um "padrão de interação"
+     (item 3 do escopo front-end, ver `project_frontend_scope.md`) pra
+     qualquer gráfico/mini-visualização futura no toolkit — mostrar
+     detalhe só sob demanda em vez de cravar tudo na tela.
    - **Detalhe fechado — C (scroll único) é o padrão**, A (abas) mantida
      como alternativa pra registros com muita informação distinta
      (documentos, histórico extenso). B (painel lateral) tinha um bug
@@ -72,24 +87,36 @@
      preenchem no `rh-pontoe` é um bom exemplo a olhar quando for
      desenhar o formulário de verdade (não conferido ainda nesta sessão
      — `rh-pontoe` não estava aberto).
-5. **Migração do `mundialito`** — revisão de impacto já aprovou com
+5. **Ideia trazida pelo usuário, ainda não implementada: link de
+   WhatsApp pré-preenchido (sem pagar API).** O `rh-pontoe` usa isso pra
+   avisar candidato de processo seletivo — um link tipo
+   `https://wa.me/<telefone>?text=<mensagem codificada>` que abre o
+   WhatsApp do usuário já com a mensagem pronta pro número do
+   destinatário, sem precisar da API paga do WhatsApp Business. É um
+   candidato forte a módulo real do toolkit (não catálogo visual) — função
+   pura, sem dependência, mesmo estilo dos módulos `src/*.ts` que já
+   existem (`signed-session`, `secure-cookie-option`). Diferente do
+   Button/Card, não esbarra na regra dos 3 (não é lógica que diverge
+   entre projetos, é 1 linha determinística). **Aguardando o usuário
+   decidir se constrói agora ou fica só anotado pra depois.**
+6. **Migração do `mundialito`** — revisão de impacto já aprovou com
    ressalvas. Não fazer durante a janela do torneio. Ao retomar,
    prototipar a composição de `createAccessGate()` DENTRO do `lib/auth/*`
    do mundialito primeiro (revisor-impacto vetou extrair pro toolkit de um
    esboço isolado — ver `project_personal_library_audit.md`).
-6. **Buracos de teste na cola:** `setSignedCookie`/`clearSignedCookie`/
+7. **Buracos de teste na cola:** `setSignedCookie`/`clearSignedCookie`/
    `readSignedCookie` (`session-cookie.ts`) continuam sem teste —
    `next/headers` não resolve fora do bundler do Next, nem com
    `mock.module`. Fechar de verdade exige (a) teste de integração dentro
    de uma app Next real, ou (b) mudar `session-cookie.ts` pra aceitar um
    cookie store injetável. Decisão de design em aberto, não é só "faltou
    tentar".
-7. **Arquivo duplicado pendente de remoção manual pelo usuário** (bloqueio
+8. **Arquivo duplicado pendente de remoção manual pelo usuário** (bloqueio
    de segurança impediu apagar automaticamente):
    ```bash
    rm "C:/Users/eduke/.claude/templates/design-tokens.css"
    ```
-8. **Bug pequeno encontrado no `design-system-explorer.html`:** o badge de
+9. **Bug pequeno encontrado no `design-system-explorer.html`:** o badge de
    contraste WCAG às vezes trava mostrando `1.00:1`/valores errados em
    todos os pares depois de trocar paleta+arquétipo+fonte em sequência,
    mesmo com o texto visivelmente legível na tela — parece cálculo não

@@ -248,4 +248,40 @@ vi o bug do painel lateral nos meus próprios testes, só apareceu quando o
 usuário abriu o arquivo no navegador de verdade dele). Pra qualquer
 julgamento visual fino daqui pra frente, vale considerar pedir pro
 usuário abrir o arquivo localmente em vez de confiar só no screenshot do
-painel interno.
+painel interno. (Salvo também como memória global —
+`feedback_visual_review_real_browser.md` — porque vale pra qualquer
+projeto, não só este.)
+
+**2026-09-19, correção real sobre a listagem — card pode ser tão denso
+quanto tabela.** O usuário mandou um print do financeiro-ponto-e
+("Projeção de vendas por vendedor") mostrando cards com: nome, 2
+métricas de contexto, barra de progresso, 2 números grandes (valor +
+projeção) e um mini-gráfico "venda por dia". Meu primeiro veredito (A
+tabela = padrão, B card = secundário/leve, só pra identidade visual)
+estava errado — subestimei o quanto um card comporta. Corrigido:
+`_visual/listing-catalog.html` direção B reconstruída no mesmo nível de
+densidade (dados fictícios plausíveis, gráfico com barras + hover).
+**A e B agora são usos diferentes, não hierarquia** — tabela pra dado
+tabular simples, card denso pra quando cada registro já é uma métrica de
+desempenho por si só.
+
+Elemento novo capturado na mesma mensagem: **hover revelando detalhe**
+(no financeiro-ponto-e, passar o mouse numa barra do gráfico destrincha a
+semana/dia) — implementado como demonstração no mini-gráfico da direção B
+(tooltip via CSS `content:attr(data-tip)`, sem JS de posicionamento).
+Vale generalizar como um padrão de interação real do toolkit (item 3 do
+escopo, "padrões de interação") quando qualquer gráfico/visualização for
+desenhado de verdade — a lógica por trás: evita poluir a tela com todo
+detalhe cravado, mas mantém a profundidade de análise disponível sob
+demanda.
+
+**Ideia nova, ainda não implementada: link de WhatsApp pré-preenchido.**
+O `rh-pontoe` usa link tipo `https://wa.me/<telefone>?text=<mensagem>`
+pra notificar candidato de processo seletivo sem pagar API do WhatsApp
+Business — o navegador/app do destinatário abre com a mensagem já
+pronta. Diferente das telas de catálogo, isso é técnico/utilitário, não
+visual — candidato forte a módulo real em `src/*.ts` (função pura, 1
+linha de lógica, sem dependência), no mesmo espírito dos módulos de
+infra que já existem. Não esbarra na regra dos 3 porque não há lógica
+divergente entre projetos pra convergir — é determinístico. Aguardando o
+usuário decidir se constrói agora.
