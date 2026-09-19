@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Catálogo de listagem — direções estruturais</title>
+<!--
+  Quarto caso do catálogo (ver HANDOFF.md / project_frontend_scope.md).
+  Reaproveita o shell da sidebar já fechado (igual dashboard-catalog.html)
+  — só o CONTEÚDO da área principal varia. Tela mais repetida entre os 5
+  projetos reais (funcionários, lançamentos, equipes, itens de estoque).
+  Nota: o toggle das direções usa uma classe (.dirpane) sem display fixo
+  pra evitar o bug de [hidden] já corrigido no login-catalog.html.
+-->
+<style>
+  :root {
+    --canvas: oklch(0.96 0.004 250); --surface: oklch(0.995 0.002 250); --fill: oklch(0.93 0.006 250);
+    --ink: oklch(0.28 0.006 250); --ink-muted: oklch(0.5 0.006 250); --ink-faint: oklch(0.64 0.005 250);
+    --accent: oklch(0.32 0.01 250); --accent-ink: oklch(0.98 0.002 250); --line: oklch(0.87 0.006 250);
+    --rail-bg: oklch(0.22 0.006 250); --rail-ink: oklch(0.7 0.006 250); --rail-ink-active: oklch(0.98 0.002 250);
+    --radius: 10px; --shadow: 0 10px 30px rgba(0,0,0,.06); --sp: 1; --ts: 1.15;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, sans-serif; background:#e9e9e6; color:var(--ink); }
+  .controls { position:sticky; top:0; z-index:10; background:#1d1d1b; color:#fff; padding:14px 24px; display:flex; align-items:center; gap:28px; flex-wrap:wrap; }
+  .controls h1 { font-size:14px; font-weight:600; margin:0; text-transform:uppercase; letter-spacing:.06em; }
+  .controls .hint { font-size:12px; color:#bbb; margin:0; flex-basis:100%; }
+  .slider { display:flex; align-items:center; gap:8px; font-size:12px; }
+  .slider input { width:140px; }
+  .slider .val { width:40px; color:#bbb; }
+  main.wrap { padding:32px; max-width:1080px; margin:0 auto; }
+
+  .dirtabs { display:flex; gap:8px; margin-bottom:16px; }
+  .dirtabs button { font:inherit; font-size:13px; font-weight:600; border:1px solid var(--line); background:var(--surface); color:var(--ink-muted); border-radius:999px; padding:7px 18px; cursor:pointer; }
+  .dirtabs button.active { background:var(--ink); color:var(--surface); border-color:var(--ink); }
+  .dirlabel { font-size:12px; color:#555; margin:0 0 20px; }
+
+  .screen { border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--canvas); box-shadow:var(--shadow); display:flex; min-height:560px; }
+
+  .rail { width:60px; background:var(--rail-bg); display:flex; flex-direction:column; padding:calc(14px*var(--sp)) 0; flex-shrink:0; transition:width .18s ease; overflow:hidden; }
+  .rail.expanded { width:208px; }
+  .rail-brand { display:flex; align-items:center; gap:12px; padding:0 calc(15px*var(--sp)) calc(18px*var(--sp)); white-space:nowrap; }
+  .rail-brand .mark { width:26px; height:26px; border-radius:7px; background:var(--rail-ink-active); color:var(--rail-bg); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+  .rail-brand .name { color:var(--rail-ink-active); font-weight:700; font-size:14px; opacity:0; transition:opacity .12s ease; }
+  .rail.expanded .rail-brand .name { opacity:1; }
+  .rail-nav { flex:1; display:flex; flex-direction:column; gap:2px; }
+  .rail-item { display:flex; align-items:center; gap:12px; padding:calc(9px*var(--sp)) calc(15px*var(--sp)); color:var(--rail-ink); text-decoration:none; white-space:nowrap; border-radius:8px; margin:0 8px; font-size:calc(13px*var(--ts)); }
+  .rail-item .ic { width:20px; flex-shrink:0; text-align:center; }
+  .rail-item .lbl { opacity:0; transition:opacity .12s ease; }
+  .rail.expanded .rail-item .lbl { opacity:1; }
+  .rail-item.active { background:rgba(255,255,255,.1); color:var(--rail-ink-active); font-weight:600; }
+  .rail-toggle { display:flex; align-items:center; gap:12px; padding:calc(9px*var(--sp)) calc(15px*var(--sp)); margin:0 8px; color:var(--rail-ink); background:none; border:none; cursor:pointer; border-radius:8px; font:inherit; font-size:calc(13px*var(--ts)); white-space:nowrap; }
+  .rail-toggle .ic { width:20px; flex-shrink:0; text-align:center; transition:transform .18s ease; }
+  .rail.expanded .rail-toggle .ic { transform:rotate(180deg); }
+  .rail-toggle .lbl { opacity:0; transition:opacity .12s ease; }
+  .rail.expanded .rail-toggle .lbl { opacity:1; }
+
+  .main { flex:1; padding:calc(22px*var(--sp)); min-width:0; overflow:auto; }
+  .dirpane[hidden] { display:none; }
+
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:calc(16px*var(--sp)); }
+  .badge { font-size:11px; font-weight:600; padding:2px 9px; border-radius:999px; background:color-mix(in oklab, var(--accent) 12%, transparent); color:var(--accent); }
+  h3.title { font-size:calc(16px*var(--ts)); margin:0 0 calc(12px*var(--sp)); }
+  .filter-bar { display:flex; gap:calc(8px*var(--sp)); margin-bottom:calc(14px*var(--sp)); }
+  .filter-bar .chip { font-size:12px; border:1px solid var(--line); background:var(--surface); border-radius:999px; padding:5px 14px; color:var(--ink-muted); }
+  .filter-bar .chip.active { background:var(--ink); color:var(--surface); border-color:var(--ink); }
+
+  /* ── A: tabela densa (Ponto E) ── */
+  .wide-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  .wide-table th { text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); padding:0 calc(10px*var(--sp)) calc(8px*var(--sp)); }
+  .wide-table td { padding:calc(9px*var(--sp)) calc(10px*var(--sp)); border-top:1px solid var(--line); }
+  .pagination { display:flex; justify-content:space-between; align-items:center; margin-top:calc(12px*var(--sp)); font-size:12px; color:var(--ink-muted); }
+  .pagination .pg-btns { display:flex; gap:6px; }
+  .pagination button { font:inherit; font-size:12px; border:1px solid var(--line); background:var(--surface); border-radius:6px; padding:4px 10px; cursor:pointer; color:var(--ink-muted); }
+
+  /* ── B: grade de cards (mundialito) ── */
+  .item-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:calc(16px*var(--sp)); }
+  .item-card { padding:calc(20px*var(--sp)); text-align:center; }
+  .item-card .avatar { width:44px; height:44px; border-radius:999px; background:var(--fill); color:var(--ink-muted); display:flex; align-items:center; justify-content:center; font-weight:700; margin:0 auto calc(12px*var(--sp)); }
+  .item-card .name { font-weight:600; font-size:calc(14px*var(--ts)); margin:0 0 4px; }
+  .item-card .meta { font-size:12px; color:var(--ink-muted); margin:0 0 calc(10px*var(--sp)); }
+
+  /* ── C: agrupado por status (kanban) ── */
+  .kanban { display:flex; gap:calc(14px*var(--sp)); align-items:flex-start; }
+  .kanban-col { flex:1; background:var(--fill); border-radius:var(--radius); padding:calc(12px*var(--sp)); min-width:0; }
+  .kanban-col h4 { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-muted); margin:0 0 calc(10px*var(--sp)); display:flex; justify-content:space-between; }
+  .kanban-card { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:calc(10px*var(--sp)); margin-bottom:calc(8px*var(--sp)); font-size:12.5px; }
+  .kanban-card .who { color:var(--ink-muted); font-size:11px; margin-top:4px; }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <h1>Densidade &amp; escala</h1>
+  <div class="slider"><label>Densidade</label><input id="dens" type="range" min="0.8" max="1.4" step="0.05" value="1"><span class="val" id="densV">1.00</span></div>
+  <div class="slider"><label>Escala tipo</label><input id="tscale" type="range" min="1" max="1.7" step="0.05" value="1.15"><span class="val" id="tscaleV">1.15</span></div>
+  <p class="hint">Shell (sidebar) já decidido — o que varia aqui é só o conteúdo da listagem. Cor e fonte fora de propósito.</p>
+</div>
+
+<main class="wrap">
+  <div class="dirtabs">
+    <button class="active" data-dir="a">A — Tabela densa</button>
+    <button data-dir="b">B — Grade de cards</button>
+    <button data-dir="c">C — Agrupado por status</button>
+  </div>
+  <p class="dirlabel" id="dirlabel">Inspirado em financeiro-ponto-e / rh-pontoe / ponto-e-stock: cada linha é um registro, filtros e paginação no rodapé.</p>
+
+  <div class="screen">
+    <aside class="rail" id="rail">
+      <div class="rail-brand"><span class="mark">E</span><span class="name">Edukern</span></div>
+      <nav class="rail-nav">
+        <a class="rail-item"><span class="ic">⌂</span><span class="lbl">Visão geral</span></a>
+        <a class="rail-item active"><span class="ic">▤</span><span class="lbl">Colaboradores</span></a>
+        <a class="rail-item"><span class="ic">☰</span><span class="lbl">Lançamentos</span></a>
+        <a class="rail-item"><span class="ic">⚙</span><span class="lbl">Configurações</span></a>
+      </nav>
+      <button class="rail-toggle" id="toggle"><span class="ic">»</span><span class="lbl">Recolher</span></button>
+    </aside>
+
+    <div class="main">
+      <!-- A -->
+      <div class="dirpane" data-dir="a">
+        <h3 class="title">Colaboradores</h3>
+        <div class="filter-bar">
+          <span class="chip active">Todos</span><span class="chip">Ativos</span><span class="chip">Afastados</span>
+        </div>
+        <div class="card">
+          <table class="wide-table">
+            <thead><tr><th>Nome</th><th>Cargo</th><th>Setor</th><th>Admissão</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Ana Powers</td><td>Analista financeiro</td><td>Financeiro</td><td>12/03/2024</td><td><span class="badge">Ativo</span></td></tr>
+              <tr><td>Bruno Lima</td><td>Estoquista</td><td>Operações</td><td>02/07/2023</td><td><span class="badge">Ativo</span></td></tr>
+              <tr><td>Carla Reis</td><td>Coordenadora RH</td><td>RH</td><td>19/11/2022</td><td><span class="badge">Ativo</span></td></tr>
+              <tr><td>Diego Farias</td><td>Assistente adm.</td><td>Financeiro</td><td>04/01/2025</td><td><span class="badge">Afastado</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination"><span>1–4 de 34</span><div class="pg-btns"><button>Anterior</button><button>Próxima</button></div></div>
+      </div>
+
+      <!-- B -->
+      <div class="dirpane" data-dir="b" hidden>
+        <h3 class="title">Colaboradores</h3>
+        <div class="filter-bar">
+          <span class="chip active">Todos</span><span class="chip">Ativos</span><span class="chip">Afastados</span>
+        </div>
+        <div class="item-grid">
+          <div class="card item-card"><div class="avatar">AP</div><p class="name">Ana Powers</p><p class="meta">Analista financeiro</p><span class="badge">Ativo</span></div>
+          <div class="card item-card"><div class="avatar">BL</div><p class="name">Bruno Lima</p><p class="meta">Estoquista</p><span class="badge">Ativo</span></div>
+          <div class="card item-card"><div class="avatar">CR</div><p class="name">Carla Reis</p><p class="meta">Coordenadora RH</p><span class="badge">Ativo</span></div>
+          <div class="card item-card"><div class="avatar">DF</div><p class="name">Diego Farias</p><p class="meta">Assistente adm.</p><span class="badge">Afastado</span></div>
+          <div class="card item-card"><div class="avatar">EM</div><p class="name">Elisa Matos</p><p class="meta">Analista RH</p><span class="badge">Ativo</span></div>
+          <div class="card item-card"><div class="avatar">FS</div><p class="name">Felipe Souza</p><p class="meta">Estoquista</p><span class="badge">Ativo</span></div>
+        </div>
+      </div>
+
+      <!-- C -->
+      <div class="dirpane" data-dir="c" hidden>
+        <h3 class="title">Lançamentos</h3>
+        <div class="kanban">
+          <div class="kanban-col">
+            <h4>Pendente <span>3</span></h4>
+            <div class="kanban-card">Compra de material<div class="who">Bruno Lima</div></div>
+            <div class="kanban-card">Reembolso viagem<div class="who">Ana Powers</div></div>
+            <div class="kanban-card">Ajuste de estoque<div class="who">Felipe Souza</div></div>
+          </div>
+          <div class="kanban-col">
+            <h4>Em análise <span>2</span></h4>
+            <div class="kanban-card">Nota fiscal #4021<div class="who">Carla Reis</div></div>
+            <div class="kanban-card">Pagamento fornecedor<div class="who">Diego Farias</div></div>
+          </div>
+          <div class="kanban-col">
+            <h4>Confirmado <span>4</span></h4>
+            <div class="kanban-card">Folha de pagamento<div class="who">Carla Reis</div></div>
+            <div class="kanban-card">Aluguel sede<div class="who">Ana Powers</div></div>
+            <div class="kanban-card">Manutenção equip.<div class="who">Bruno Lima</div></div>
+            <div class="kanban-card">Assinatura software<div class="who">Elisa Matos</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const root = document.documentElement.style;
+  const dens = document.getElementById('dens'), densV = document.getElementById('densV');
+  const tscale = document.getElementById('tscale'), tscaleV = document.getElementById('tscaleV');
+  dens.oninput = () => { root.setProperty('--sp', dens.value); densV.textContent = (+dens.value).toFixed(2); };
+  tscale.oninput = () => { root.setProperty('--ts', tscale.value); tscaleV.textContent = (+tscale.value).toFixed(2); };
+
+  document.getElementById('toggle').onclick = () => document.getElementById('rail').classList.toggle('expanded');
+
+  const labels = {
+    a: 'Inspirado em financeiro-ponto-e / rh-pontoe / ponto-e-stock: cada linha é um registro, filtros e paginação no rodapé.',
+    b: 'Inspirado no mundialito: cada registro vira um card visual, mais respiro, melhor quando a identidade de cada item importa (foto/avatar).',
+    c: 'Terceira direção, sem persona fixa: agrupado por status/etapa (kanban) — bom pra fluxo de trabalho, não só cadastro estático.'
+  };
+  document.querySelectorAll('.dirtabs button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.dirtabs button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    const dir = b.dataset.dir;
+    document.querySelectorAll('.dirpane').forEach(d => d.hidden = d.dataset.dir !== dir);
+    document.getElementById('dirlabel').textContent = labels[dir];
+  });
+</script>
+</body>
+</html>

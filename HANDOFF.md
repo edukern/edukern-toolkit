@@ -36,30 +36,50 @@
    (o usuário pediu explicitamente pra não eliminar nenhuma das duas,
    diferente do menu/dashboard onde uma única direção virou a base). C
    (minimalista passwordless) continua no arquivo, mas não foi escolhida.
-   - Próxima tela candidata depois: central de ajuda (já tem a skill
-     `central-ajuda` pronta — avaliar se cobre o caso antes de duplicar
-     esforço aqui).
+   - Central de ajuda **não vai virar catálogo** — a skill `central-ajuda`
+     já resolve isso de outro jeito (gera a página de verdade dentro do
+     projeto real, com dados e menu integrados), não faz sentido duplicar
+     como mockup de comparação.
    - **Lembrete confirmado com o usuário:** todo molde do catálogo
      (menu, dashboard, login) é ponto de partida estrutural pra
      adaptar por projeto, não implementação final pronta pra importar.
-4. **Migração do `mundialito`** — revisão de impacto já aprovou com
+4. **Três novos catálogos criados a partir de um brainstorm de telas
+   restantes (usuário pediu ideação livre): listagem, detalhe de
+   registro, formulário complexo.** Todos reaproveitam o shell da
+   sidebar já fechado (igual dashboard), testados no browser, os 3
+   direções de cada um alternam certo. **Aguardando o usuário escolher em
+   cada um** (mesmo padrão: escolha define o que vira base, não elimina
+   as outras — a menos que ele peça, como fez no login).
+   - `_visual/listing-catalog.html` — tela mais repetida entre os 5
+     projetos reais (funcionários, lançamentos, equipes, estoque). A
+     tabela densa (Ponto E), B grade de cards (mundialito), C agrupado
+     por status/kanban (terceira direção, sem persona fixa).
+   - `_visual/detail-catalog.html` — abrir 1 registro. A página cheia com
+     abas, B painel lateral (drawer) sobre a lista esmaecida ao fundo, C
+     scroll único com seções empilhadas.
+   - `_visual/form-catalog.html` — cadastro com bastante campo (os
+     catálogos anteriores só tinham forms de 3 campos). A wizard por
+     etapas com indicador de progresso, B página única longa com seções
+     espaçadas (mundialito), C acordeão com seções recolhíveis (bom pra
+     editar um registro já existente, não só criar um novo).
+5. **Migração do `mundialito`** — revisão de impacto já aprovou com
    ressalvas. Não fazer durante a janela do torneio. Ao retomar,
    prototipar a composição de `createAccessGate()` DENTRO do `lib/auth/*`
    do mundialito primeiro (revisor-impacto vetou extrair pro toolkit de um
    esboço isolado — ver `project_personal_library_audit.md`).
-5. **Buracos de teste na cola:** `setSignedCookie`/`clearSignedCookie`/
+6. **Buracos de teste na cola:** `setSignedCookie`/`clearSignedCookie`/
    `readSignedCookie` (`session-cookie.ts`) continuam sem teste —
    `next/headers` não resolve fora do bundler do Next, nem com
    `mock.module`. Fechar de verdade exige (a) teste de integração dentro
    de uma app Next real, ou (b) mudar `session-cookie.ts` pra aceitar um
    cookie store injetável. Decisão de design em aberto, não é só "faltou
    tentar".
-6. **Arquivo duplicado pendente de remoção manual pelo usuário** (bloqueio
+7. **Arquivo duplicado pendente de remoção manual pelo usuário** (bloqueio
    de segurança impediu apagar automaticamente):
    ```bash
    rm "C:/Users/eduke/.claude/templates/design-tokens.css"
    ```
-7. **Bug pequeno encontrado no `design-system-explorer.html`:** o badge de
+8. **Bug pequeno encontrado no `design-system-explorer.html`:** o badge de
    contraste WCAG às vezes trava mostrando `1.00:1`/valores errados em
    todos os pares depois de trocar paleta+arquétipo+fonte em sequência,
    mesmo com o texto visivelmente legível na tela — parece cálculo não

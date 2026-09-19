@@ -178,3 +178,37 @@ fixa como a do menu. C (minimalista passwordless) segue no arquivo, só
 não foi escolhida. Padrão a levar pra próximos catálogos: "fechar" um
 caso não significa sempre reduzir a 1 direção — às vezes o resultado
 certo é reduzir o leque (3→2), não convergir pra 1.
+
+Central de ajuda descartada como próximo catálogo: a skill `central-ajuda`
+já resolve isso de forma diferente (gera a página de verdade dentro do
+projeto real, dados + menu integrados), não faz sentido duplicar como
+mockup de comparação.
+
+**2026-09-19, brainstorm de telas restantes + 3 novos catálogos.**
+Usuário pediu ideação livre sobre quais outras telas fariam sentido
+entrar no catálogo. Levantamento feito a partir do que se repete entre os
+5 projetos reais (não invenção livre): listagem de dados, detalhe de
+registro, formulário complexo, configurações, estado vazio (esse último
+descartado — é padrão pontual, cabe dentro da listagem, não é tela
+própria). Usuário escolheu avançar com os 3 primeiros.
+
+Todos os 3 reaproveitam o shell da sidebar (igual dashboard, não como
+menu/login que comparam telas inteiras) — decisão consistente: toda tela
+"de dentro do app autenticado" nasce dentro do shell já fechado.
+
+- `_visual/listing-catalog.html`: A tabela densa (Ponto E), B grade de
+  cards (mundialito, melhor quando a identidade visual de cada item
+  importa), C agrupado por status/kanban (terceira direção, pra fluxo de
+  trabalho, não só cadastro estático).
+- `_visual/detail-catalog.html`: A página cheia com abas, B painel
+  lateral/drawer sobre a lista esmaecida (mantém o contexto de onde
+  veio), C scroll único com seções empilhadas (bom pra registro com muito
+  conteúdo).
+- `_visual/form-catalog.html`: cobre o caso "cadastro de verdade" que os
+  catálogos anteriores não cobriam (só tinham forms de 3 campos). A
+  wizard por etapas com progresso, B página única longa com seções
+  espaçadas (mundialito), C acordeão com seções recolhíveis (bom pra
+  editar registro já existente — abre só o que precisa mexer).
+
+Todos os 3 testados no browser, as direções alternam certo. Aguardando o
+usuário escolher em cada um.
