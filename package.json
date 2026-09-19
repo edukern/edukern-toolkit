@@ -1,45 +1,54 @@
 {
   "name": "@edukern/toolkit",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
   "exports": {
     "./supabase-client": {
       "types": "./dist/supabase-client.d.ts",
-      "import": "./dist/supabase-client.js"
+      "import": "./dist/supabase-client.js",
+      "default": "./dist/supabase-client.js"
     },
     "./supabase-client-node": {
       "types": "./dist/supabase-client-node.d.ts",
-      "import": "./dist/supabase-client-node.js"
+      "import": "./dist/supabase-client-node.js",
+      "default": "./dist/supabase-client-node.js"
     },
     "./signed-session": {
       "types": "./dist/signed-session.d.ts",
-      "import": "./dist/signed-session.js"
+      "import": "./dist/signed-session.js",
+      "default": "./dist/signed-session.js"
     },
     "./timing-safe-compare": {
       "types": "./dist/timing-safe-compare.d.ts",
-      "import": "./dist/timing-safe-compare.js"
+      "import": "./dist/timing-safe-compare.js",
+      "default": "./dist/timing-safe-compare.js"
     },
     "./session-cookie": {
       "types": "./dist/session-cookie.d.ts",
-      "import": "./dist/session-cookie.js"
+      "import": "./dist/session-cookie.js",
+      "default": "./dist/session-cookie.js"
     },
     "./supabase-tenant-client": {
       "types": "./dist/supabase-tenant-client.d.ts",
-      "import": "./dist/supabase-tenant-client.js"
+      "import": "./dist/supabase-tenant-client.js",
+      "default": "./dist/supabase-tenant-client.js"
     },
     "./sign-tenant-token": {
       "types": "./dist/sign-tenant-token.d.ts",
-      "import": "./dist/sign-tenant-token.js"
+      "import": "./dist/sign-tenant-token.js",
+      "default": "./dist/sign-tenant-token.js"
     },
     "./secure-cookie-option": {
       "types": "./dist/secure-cookie-option.d.ts",
-      "import": "./dist/secure-cookie-option.js"
+      "import": "./dist/secure-cookie-option.js",
+      "default": "./dist/secure-cookie-option.js"
     },
     "./revocable-token": {
       "types": "./dist/revocable-token.d.ts",
-      "import": "./dist/revocable-token.js"
+      "import": "./dist/revocable-token.js",
+      "default": "./dist/revocable-token.js"
     }
   },
   "scripts": {
