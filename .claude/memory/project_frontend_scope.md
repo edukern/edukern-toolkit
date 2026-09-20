@@ -275,6 +275,53 @@ desenhado de verdade — a lógica por trás: evita poluir a tela com todo
 detalhe cravado, mas mantém a profundidade de análise disponível sob
 demanda.
 
+**2026-09-19, correção sobre convergência de tokens — a afirmação acima
+(linha 26-30, "4 dos 5 projetos já usam os mesmos nomes de token") era
+otimista.** O usuário pediu pra reexaminar se a divergência real de
+Button/Card entre mundialito/proficiencia-ucs/ponto-e-stock era decisão de
+produto ou só falta de estrutura compartilhada. Fui ler o código de
+verdade (não só grep de nome de token) e rodei `revisor-impacto` antes de
+agir, porque a mudança mexe em módulo compartilhado e reabre uma decisão
+já vetada uma vez. Achados reais:
+
+- `ponto-e-stock` usava `--color-primary`/`--color-primary-ink` em vez de
+  `--color-accent`/`--color-accent-ink` — 23 arquivos, incluindo
+  `src/features/ui/tokens.md` (doc interna do próprio projeto). Corrigido
+  isolado, fora do toolkit (branch `chore/token-accent-rename` no
+  ponto-e-stock).
+- `proficiencia-ucs` não tinha `--color-danger` (só `--color-erro`, que é
+  especificamente resposta errada de questão, não "ação destrutiva"
+  genérica). Ganhou `--color-danger` como alias apontando pro mesmo valor
+  (branch `chore/danger-token-alias`), sem tocar no significado de `erro`.
+- `mundialito` já estava alinhado (`bg-accent`/`bg-danger` corretos),
+  nenhuma mudança necessária.
+- **Nenhum dos 5 projetos importa `design-tokens.css` via pacote** — a
+  convergência de nomes que existe é por convenção copiada manualmente,
+  não por dependência real. O arquivo do toolkit ganhou uma frase
+  explícita: o contrato é o NOME da variável, "copiar e ajustar valores"
+  não inclui renomear.
+- Duas divergências que eu tinha chamado de "acidentais" na primeira
+  leitura são, na verdade, decisão de produto real e devem continuar
+  divergentes: `rounded-full` do mundialito (ecoa a fonte da marca,
+  documentado no código) e `min-h-11` do proficiencia-ucs (alvo de toque
+  WCAG 44px) contra os `h-10` (40px) do mundialito.
+
+**Veredito do revisor-impacto: Button/Card continuam NÃO extraídos.** A
+causa raiz (falta de vocabulário compartilhado) se resolve nos tokens, não
+construindo o componente — e boa parte do "ganho" da extração já foi
+capturado só de harmonizar os nomes acima, sem publicar linha nenhuma de
+React. Base UI (headless, sucessor do Radix) fica adiado — não tem export
+de Card, está em release candidate, e pra Button o ganho sobre HTML nativo
+é pequeno. Guardar Base UI pra quando aparecer Select/Dialog/Menu de
+verdade. Ordem recomendada se algum dia isso for retomado: proficiencia-ucs
+como primeiro consumidor real de um token file importado (não só
+convenção copiada) → prototipar Button dentro do mundialito (caso mais
+rico: 6 variantes, `forwardRef`, `buttonClassName`, variante
+`sobre-acento` real de produto) → só extrair quando o mesmo arquivo servir
+sem edição num terceiro projeto. Card nem entra nessa fila — fino demais
+pra compensar o acoplamento (ponto-e-stock sozinho já tem 3 fundações de
+card diferentes: MUI, Tailwind, div crua).
+
 **Ideia nova, ainda não implementada: link de WhatsApp pré-preenchido.**
 O `rh-pontoe` usa link tipo `https://wa.me/<telefone>?text=<mensagem>`
 pra notificar candidato de processo seletivo sem pagar API do WhatsApp

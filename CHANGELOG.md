@@ -4,6 +4,23 @@ Formato livre (não é registry npm com changelog automático — instalação �
 via tag git, `github:edukern/edukern-toolkit#vX.Y.Z`). Toda versão nova que
 um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 
+## Não lançado
+
+- docs: `design-tokens.css` deixa explícito que o contrato é o NOME do
+  token, não o valor — "copiar e ajustar" não inclui renomear. Motivo:
+  `revisor-impacto` conferiu o código real (não só o nome do arquivo) e
+  achou que a afirmação "4 dos 5 projetos já seguem essa convenção" (nota
+  do v0.4.0 abaixo) era otimista demais — ponto-e-stock usava
+  `--color-primary` em vez de `--color-accent` em 23 arquivos. Corrigido
+  isolado no próprio ponto-e-stock (branch `chore/token-accent-rename`),
+  fora deste pacote. proficiencia-ucs ganhou `--color-danger` como alias
+  de `--color-erro` (branch `chore/danger-token-alias`) — mesma causa.
+  mundialito já estava alinhado, sem mudança. Nenhum consumidor importa
+  `design-tokens.css` via pacote ainda — a convergência até aqui é por
+  convenção copiada, não por dependência real. Button/Card seguem NÃO
+  extraídos (regra dos 3 seguindo em vigor); ver
+  `.claude/memory/project_frontend_scope.md`.
+
 ## v0.4.0
 
 - feat: `design-tokens.css` — primeira peça de front-end do toolkit (as

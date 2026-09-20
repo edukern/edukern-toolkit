@@ -3,6 +3,13 @@
    Copiar para o globals.css de um projeto novo e ajustar SÓ os valores.
    Regra de ouro: componente nunca usa cor/sombra/raio hardcoded — só o token.
    Trocar marca, fonte ou tema = editar AQUI, em um lugar só.
+
+   O CONTRATO É O NOME, não o valor. "Copiar e ajustar valores" não inclui
+   renomear a variável (ex.: virar --color-primary em vez de --color-accent)
+   — isso quebra o vocabulário compartilhado entre projetos e é a causa real
+   de um Button/Card não dar pra unificar depois (achado real, ver
+   .claude/memory/project_frontend_scope.md). Pode adicionar token novo:
+   não pode trocar o nome de um que já existe aqui.
    ────────────────────────────────────────────────────────────────────────── */
 
 /* Pares fora do padrão "IA" (evitar Inter/Roboto/Poppins como default) —
