@@ -126,6 +126,12 @@ não tem o que fazer com esses dois módulos — nesse caso só `supabase-client
   `formatDatePtBR` (sem `Intl`, mesmo motivo do `currency-br`) e `countUnseen`
   (bolinha "novo" no menu). A tela em si segue a skill global `novidades`.
 
+## Começando um projeto novo
+
+Ver `docs/novo-projeto.md`: quem é dono de cada coisa (cultura de trabalho fica
+no repositório privado de configurações do Claude, código e moldes ficam aqui)
+e o checklist de início.
+
 ## Templates (`templates/`)
 
 `eslint.config.mjs` e `ci.yml` genéricos pra copiar num projeto novo. Ver

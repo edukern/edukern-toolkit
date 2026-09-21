@@ -27,3 +27,8 @@ Ajuste antes de usar: o passo `Build` no exemplo passa `NEXT_PUBLIC_SUPABASE_URL
 que seu projeto precisa em build time (ou remova o bloco `env:` se não
 precisar de nenhuma). Se o projeto não usa Supabase, tire a linha do
 comentário sobre RLS também.
+
+## `projeto-novo/CLAUDE.md`
+
+`CLAUDE.md` mínimo de projeto: só referencia a cultura global e mantém as regras
+específicas. Checklist completo em `docs/novo-projeto.md`.

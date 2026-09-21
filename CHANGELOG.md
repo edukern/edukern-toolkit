@@ -6,6 +6,9 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 
 ## Não lançado
 
+- docs: `docs/novo-projeto.md` (checklist + dono de cada assunto, aponta pro
+  repositório de configurações do Claude em vez de copiar regra) e
+  `templates/projeto-novo/CLAUDE.md`.
 - feat: `release-notes` (`ReleaseNote`, `sortReleaseNotes`, `formatDatePtBR`,
   `countUnseen`) — padrão de "Novidades" pro usuário final, separado deste
   changelog (que é técnico, pra quem instala o pacote). Data formatada sem
