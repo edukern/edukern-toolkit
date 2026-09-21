@@ -29,6 +29,12 @@
    memória por projeto (`~/.claude/projects/*/memory`). `sync-to-new-machine.ps1` e
    `claude-code-setup-guide.md` saíram de `~/.claude` e estão em
    `~/.claude/backups/*.old-20260921` (apagar de vez quando quiser).
+4. **Duas peças candidatas vindas da lista de segurança** (`docs/security-checklist.md`):
+   limite de tentativas de login (item 11, já reescrito em 2 projetos, ver
+   `.claude/memory/audit_familia_ponto_e.md`) e cabeçalhos de segurança (item 18,
+   nenhum projeto tem hoje). A regra dos 3 vale: só promover quando 2-3 projetos
+   convergirem na mesma forma. Ao promover qualquer peça, atualizar a coluna "Peça no
+   toolkit" da lista na mesma mudança que atualiza README e CHANGELOG.
 
 ## ✅ Feito
 
@@ -105,6 +111,10 @@
   visual fino** — mas dá pra testar LÓGICA (ex.: `ratio()` do
   `explorer.html`) via `javascript_tool` direto no console da página, sem
   depender de screenshot.
+- **Lista de segurança tem um dono só.** O conteúdo mora em `docs/security-checklist.md`
+  (aqui); o gatilho de quando consultar e o modo "com critério" moram no `CLAUDE.md`
+  global; a lista de UX (Nielsen + 8 Golden Rules) mora em
+  `~/.claude/references/ux-ui-standards.md`. Não copiar conteúdo entre eles.
 
 ## 📁 Arquivos relevantes
 
@@ -113,5 +123,7 @@
 - `.claude/memory/project_frontend_scope.md` — histórico de catálogo de
   tela e reexaminação de Button/Card.
 - `src/ui/README.md`, `templates/README.md` — como usar cada um.
+- `docs/security-checklist.md` — 20 pontos de segurança, peso por tipo de projeto e
+  mapa do que o toolkit já cobre.
 - `mundialito/.claude/memory/plano-7-8-autonomia.md` — 18 commits locais
   não publicados, relevante pro item 1 pendente.
