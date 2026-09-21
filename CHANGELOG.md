@@ -6,6 +6,27 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 
 ## Não lançado
 
+- feat: `currency-br` (`formatBRL`). Não usa `Intl.NumberFormat` de
+  propósito — pode formatar errado (ou lançar) num Node com build ICU
+  mínimo (comum em Windows/containers), achado real documentado em
+  `financeiro-ponto-e/src/lib/formato.ts`, que já evitava `Intl` pelo
+  mesmo motivo. Formatação por string, sem dependência de locale.
+- fix: `_visual/explorer.html` — badge de contraste WCAG trocado de
+  DOM-probe (`getComputedStyle` num `<span>` escondido) pra cálculo OKLCH→
+  luminância em matemática pura. O bug real: atribuir cor CSS inválida a
+  `style.color` é ignorado em silêncio pelo navegador (não lança), então o
+  probe ficava com o valor anterior depois de uma sequência de troca de
+  paleta/arquétipo/fonte — daí badges de pares diferentes lerem a mesma
+  cor "grudada" e caírem em 1.00:1 juntos. Verificado ao vivo no navegador
+  (sequência paleta→arquétipo→fonte→paleta, valores corretos em cada
+  passo).
+- docs: `templates/` — `eslint.config.mjs` e `ci.yml` genéricos pra copiar
+  num projeto novo. Achado real: 2 dos 10 projetos do survey de
+  2026-09-20 não tinham ESLint configurado; só 2 tinham CI. Fonte do CI:
+  `game-box` (mais limpo e completo).
+- docs: `_visual/patterns.md` — padrão "hover revela detalhe" (tooltip via
+  `content:attr(data-tip)`, sem JS de posicionamento), extraído do
+  `listing-catalog.html` direção B.
 - feat: `whatsapp-link` (`buildWhatsAppLink`/`normalizePhoneBR`) e `cpf`
   (`isValidCpf`/`normalizeCpf`), extraídos do `acamp-plan`. rh-pontoe
   conferido por leitura direta antes de promover — não tinha os bugs que a

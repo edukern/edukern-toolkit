@@ -75,6 +75,11 @@ install quebra em build que não instala devDependencies, ex. Vercel).
   essa dependência (git+credencial do GitHub na máquina de deploy LAN) custa
   mais que o ganho de centralizar 5 chamadas de bcrypt. Centralização real
   fica local, em `financeiro-ponto-e/src/lib/senha.ts` (já existe).
+- `@edukern/toolkit/currency-br` — `formatBRL(valor)`. Não usa
+  `Intl.NumberFormat` de propósito: pode formatar errado (ou lançar) num
+  Node com build ICU mínimo (comum em Windows/containers). Achado real:
+  `financeiro-ponto-e/src/lib/formato.ts` já evitava `Intl` pelo mesmo
+  motivo — este módulo segue a mesma estratégia (string, não `Intl`).
 - `@edukern/toolkit/sign-tenant-token` + `@edukern/toolkit/supabase-tenant-client`
   — JWT curto (60s, `jose`) com claim de tenant, pra um client Supabase anon-key
   assumir e a policy de RLS isolar por tenant. Fail-closed (lança sem
@@ -115,6 +120,11 @@ não tem o que fazer com esses dois módulos — nesse caso só `supabase-client
   `.claude/memory/starter_kit_candidates.md`). ponto-e-stock chegou a
   divergir (`--color-primary` em vez de `--color-accent`) e foi corrigido;
   vale reconferir antes de assumir consistência.
+
+## Templates (`templates/`)
+
+`eslint.config.mjs` e `ci.yml` genéricos pra copiar num projeto novo. Ver
+`templates/README.md`.
 
 ## Kit de UI (`src/ui/`)
 

@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Generate Next.js route types
+        # PageProps/LayoutProps (usados em src/app/**/layout.tsx e page.tsx) só existem depois
+        # de rodar `next dev`, `next build` ou `next typegen` — sem isso, o Type-check abaixo falha
+        # com "Cannot find name 'LayoutProps'" num checkout limpo (nunca rodou build antes).
+        run: npx next typegen
+
+      - name: Type-check
+        run: npx tsc --noEmit
+
+      - name: Tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          # Troque pelas env vars que SEU projeto precisa em build time — ou tire
+          # o bloco `env:` inteiro se não precisar de nenhuma.
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}

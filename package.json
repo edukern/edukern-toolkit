@@ -65,6 +65,11 @@
       "import": "./dist/password-hash.js",
       "default": "./dist/password-hash.js"
     },
+    "./currency-br": {
+      "types": "./dist/currency-br.d.ts",
+      "import": "./dist/currency-br.js",
+      "default": "./dist/currency-br.js"
+    },
     "./design-tokens.css": "./src/design-tokens.css"
   },
   "scripts": {
