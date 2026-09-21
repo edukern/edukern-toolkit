@@ -3,7 +3,7 @@
 > Toolkit é **starter kit**: infra/segurança fica dependência real
 > versionada; UI/visual vira referência pra copiar uma vez, sem sync depois.
 > Fila de 6 itens da sessão anterior: 5 feitos, 1 bloqueado esperando você
-> (item 1 abaixo). 54 testes passando.
+> (item 1 abaixo). 58 testes passando.
 
 ## ⏳ Pendente — esperando decisão sua
 
@@ -18,9 +18,20 @@
    já passou? (b) sabe onde ficou o parecer original do
    `createAccessGate()`? Só então prototipar DENTRO do `lib/auth/*` do
    mundialito primeiro (não extrair de esboço isolado).
+2. **Skills próprias não estão no backup.** `central-ajuda`, `novidades`,
+   `state-sync-audit`, `design-standards` etc. moram só em `~/.claude/skills/`;
+   `edukern/claude-global-config` não as exporta (`scripts/export.mjs`). Quem
+   clonar os repos não as recebe, e `docs/novo-projeto.md` cita duas delas.
+   Decidir: exportar pro repo privado (recomendado) ou mover pro toolkit.
 
 ## ✅ Feito
 
+- **`release-notes`** (tela Novidades do usuário final) + skill global
+  `novidades` (em `~/.claude/skills/`).
+- **`docs/novo-projeto.md`** + `templates/projeto-novo/CLAUDE.md` — checklist
+  de início; aponta pro repo privado `edukern/claude-global-config` (dono da
+  cultura: documentação, revisão de impacto, inline vs subagente) em vez de
+  copiar regra. Cópia velha de `design-tokens.css` removida de lá.
 - **`whatsapp-link`, `cpf`, `password-hash`** — extraídos do `acamp-plan`/
   `rh-pontoe`, com achados reais corrigidos ao promover (ver Changelog).
 - **`session-cookie-core.ts`** — split core testável + casca Next.js.
