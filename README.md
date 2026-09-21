@@ -121,6 +121,11 @@ não tem o que fazer com esses dois módulos — nesse caso só `supabase-client
   divergir (`--color-primary` em vez de `--color-accent`) e foi corrigido;
   vale reconferir antes de assumir consistência.
 
+- `@edukern/toolkit/release-notes` — base da tela "Novidades" do usuário final:
+  tipo `ReleaseNote` (data + Novo/Aprimorado/Corrigido), `sortReleaseNotes`,
+  `formatDatePtBR` (sem `Intl`, mesmo motivo do `currency-br`) e `countUnseen`
+  (bolinha "novo" no menu). A tela em si segue a skill global `novidades`.
+
 ## Templates (`templates/`)
 
 `eslint.config.mjs` e `ci.yml` genéricos pra copiar num projeto novo. Ver

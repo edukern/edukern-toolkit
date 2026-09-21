@@ -70,6 +70,11 @@
       "import": "./dist/currency-br.js",
       "default": "./dist/currency-br.js"
     },
+    "./release-notes": {
+      "types": "./dist/release-notes.d.ts",
+      "import": "./dist/release-notes.js",
+      "default": "./dist/release-notes.js"
+    },
     "./design-tokens.css": "./src/design-tokens.css"
   },
   "scripts": {

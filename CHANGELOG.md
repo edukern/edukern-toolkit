@@ -6,6 +6,10 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 
 ## Não lançado
 
+- feat: `release-notes` (`ReleaseNote`, `sortReleaseNotes`, `formatDatePtBR`,
+  `countUnseen`) — padrão de "Novidades" pro usuário final, separado deste
+  changelog (que é técnico, pra quem instala o pacote). Data formatada sem
+  `Intl` (ICU mínimo).
 - feat: `currency-br` (`formatBRL`). Não usa `Intl.NumberFormat` de
   propósito — pode formatar errado (ou lançar) num Node com build ICU
   mínimo (comum em Windows/containers), achado real documentado em
