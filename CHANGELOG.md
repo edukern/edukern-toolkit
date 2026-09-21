@@ -6,6 +6,33 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 
 ## Não lançado
 
+- feat: `whatsapp-link` (`buildWhatsAppLink`/`normalizePhoneBR`) e `cpf`
+  (`isValidCpf`/`normalizeCpf`), extraídos do `acamp-plan`. rh-pontoe
+  conferido por leitura direta antes de promover — não tinha os bugs que a
+  survey anterior sugeria (DDI e CPF já corretos lá, só não centralizados
+  no caso do CPF).
+- feat: `password-hash` (`hashPassword`/`verifyPassword`, bcryptjs 10
+  rounds). `verifyPassword` compara contra hash fixo quando `hash` é
+  nulo, em vez de early-return — evita vazar por timing se o usuário
+  existe (achado do revisor-impacto: a fonte, `rh-pontoe/lib/senha.js`,
+  fazia early-return; `financeiro-ponto-e` já mitigava isso no login,
+  então promover "como estava" teria regredido segurança). Nenhum
+  consumidor migrado — decisão consciente, ver `starter_kit_candidates.md`.
+- fix: `session-cookie.ts` dividido em `session-cookie-core.ts` (sem
+  import de framework, testável com `node --test` puro) + a casca Next.js
+  de sempre, mesmo desenho de `supabase-client-core`. API pública
+  (`setSignedCookie`/`clearSignedCookie`/`readSignedCookie`) inalterada.
+  Fecha o buraco de teste do HANDOFF; NÃO destrava `acamp-plan` como o
+  plano original assumia (CommonJS × pacote ESM-only, e modelo de sessão
+  diferente — achado do revisor-impacto).
+- fix: `timing-safe-compare.ts` retorna `false` em vez de lançar
+  `TypeError` quando o segredo esperado é `undefined`/vazio — sem a
+  guarda, uma env var não configurada virava erro 500 em vez de "não
+  autorizado".
+- feat: `src/ui/` — Button/Card/Input/Badge do mundialito, como
+  código-fonte pra copiar (excluído do build do pacote, não é export
+  npm). Regra dos 3 ainda não atingida (só 1 fonte madura real — sancho
+  confirmado incompatível, estiliza via `CSSProperties`, não Tailwind).
 - docs: `design-tokens.css` deixa explícito que o contrato é o NOME do
   token, não o valor — "copiar e ajustar" não inclui renomear. Motivo:
   `revisor-impacto` conferiu o código real (não só o nome do arquivo) e

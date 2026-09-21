@@ -13,3 +13,8 @@ test("strings diferentes comparam false", () => {
 test("tamanhos diferentes não quebram (hash equaliza o tamanho)", () => {
   assert.equal(timingSafeStringEqual("a", "muito-mais-longa-que-a"), false);
 });
+
+test("b undefined/vazio retorna false em vez de lançar (env var não configurada)", () => {
+  assert.equal(timingSafeStringEqual("qualquer", undefined as unknown as string), false);
+  assert.equal(timingSafeStringEqual("qualquer", ""), false);
+});

@@ -60,6 +60,11 @@
       "import": "./dist/cpf.js",
       "default": "./dist/cpf.js"
     },
+    "./password-hash": {
+      "types": "./dist/password-hash.d.ts",
+      "import": "./dist/password-hash.js",
+      "default": "./dist/password-hash.js"
+    },
     "./design-tokens.css": "./src/design-tokens.css"
   },
   "scripts": {
@@ -68,14 +73,15 @@
     "test": "npm run build && node --experimental-test-module-mocks --test dist/*.test.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "jose": "^5.9.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.0",
-    "@types/node": "^22.10.0",
     "@supabase/supabase-js": "^2.45.0",
+    "@types/node": "^22.10.0",
     "next": "^15.0.0",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "typescript": "^5.7.0"
   },
   "peerDependencies": {
     "@supabase/supabase-js": ">=2",

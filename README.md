@@ -32,7 +32,14 @@ install quebra em build que não instala devDependencies, ex. Vercel).
   (payload genérico, sem estado no servidor).
 - `@edukern/toolkit/session-cookie` — grava/lê/limpa o token acima num cookie
   httpOnly (Next.js `next/headers`). Reexporta `resolveSecureCookieOption` (ver
-  `secure-cookie-option` abaixo) e já usa pra decidir a flag `secure`.
+  `secure-cookie-option` abaixo) e já usa pra decidir a flag `secure`. Por
+  baixo, delega pra `session-cookie-core.ts` (sem import de framework, testado
+  com `node --test` direto — mesmo desenho de `supabase-client-core`). A
+  `core` não é exportada pelo pacote ainda: nenhum consumidor real fora do
+  Next precisa dela hoje (`acamp-plan`, o candidato óbvio, é CommonJS — o
+  pacote é ESM-only, então nem `require` funcionaria; e o modelo de sessão
+  dele é outro, id opaco em Redis, não token assinado). Existe pra fechar o
+  buraco de teste, não porque alguém está esperando pra consumir.
 - `@edukern/toolkit/secure-cookie-option` — decide a flag `secure` do cookie:
   `AUTH_COOKIE_SECURE=true/false` força, senão detecta HTTPS real via
   `x-forwarded-proto` (passando a request) ou cai pra `NODE_ENV`. Sem isso,
@@ -55,6 +62,19 @@ install quebra em build que não instala devDependencies, ex. Vercel).
   `acamp-plan`; o `rh-pontoe` já tem o mesmo algoritmo (duplicado em 2
   arquivos: `CandidaturaForm.jsx` e `FormBancoTalentos.jsx`) — candidato a
   futura limpeza lá, sem urgência.
+- `@edukern/toolkit/password-hash` — `hashPassword`/`verifyPassword`
+  (`bcryptjs`, 10 rounds — não o `bcrypt` nativo, que exige compilação
+  C++/node-gyp; ruim pra deploy em LAN on-prem). `verifyPassword` compara
+  contra um hash fixo quando `hash` é nulo/ausente, em vez de retornar
+  na hora — um early-return aqui vaza por timing se o usuário existe, mesmo
+  com mensagem de erro idêntica (`financeiro-ponto-e` já mitiga isso no
+  próprio login; `rh-pontoe/lib/senha.js`, a fonte deste módulo, fazia
+  early-return — corrigido ao promover, não copiado como estava).
+  **Nenhum projeto migrado ainda** — decisão consciente do revisor-impacto
+  em 2026-09-21: `financeiro-ponto-e` não depende do toolkit hoje, e somar
+  essa dependência (git+credencial do GitHub na máquina de deploy LAN) custa
+  mais que o ganho de centralizar 5 chamadas de bcrypt. Centralização real
+  fica local, em `financeiro-ponto-e/src/lib/senha.ts` (já existe).
 - `@edukern/toolkit/sign-tenant-token` + `@edukern/toolkit/supabase-tenant-client`
   — JWT curto (60s, `jose`) com claim de tenant, pra um client Supabase anon-key
   assumir e a policy de RLS isolar por tenant. Fail-closed (lança sem
@@ -95,6 +115,13 @@ não tem o que fazer com esses dois módulos — nesse caso só `supabase-client
   `.claude/memory/starter_kit_candidates.md`). ponto-e-stock chegou a
   divergir (`--color-primary` em vez de `--color-accent`) e foi corrigido;
   vale reconferir antes de assumir consistência.
+
+## Kit de UI (`src/ui/`)
+
+`Button`/`Card`/`Input`/`Badge` — não é exportado pelo pacote (excluído do
+`tsconfig.json`), é código-fonte pra copiar. Ver `src/ui/README.md` pro
+porquê (regra dos 3 ainda não atingida — só 1 fonte real madura,
+`mundialito`) e como usar.
 
 ## Pegadinhas que não viraram código
 

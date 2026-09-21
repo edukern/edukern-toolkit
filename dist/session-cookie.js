@@ -1,23 +1,27 @@
 import "server-only";
 import { cookies } from "next/headers";
-import { resolveSecureCookieOption } from "./secure-cookie-option.js";
+import { setSignedCookieIn, clearSignedCookieIn, readSignedCookieIn, } from "./session-cookie-core.js";
 export { resolveSecureCookieOption } from "./secure-cookie-option.js";
+export { setSignedCookieIn, clearSignedCookieIn, readSignedCookieIn, } from "./session-cookie-core.js";
+async function nextCookieStore() {
+    const jar = await cookies();
+    return {
+        set: (name, value, options) => {
+            jar.set(name, value, options);
+        },
+        delete: (name) => {
+            jar.delete(name);
+        },
+        get: (name) => jar.get(name)?.value,
+    };
+}
 /** Grava um token de sessão (ver `signed-session`) num cookie httpOnly seguro. */
 export async function setSignedCookie(name, token, maxAgeMs, request) {
-    const jar = await cookies();
-    jar.set(name, token, {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: resolveSecureCookieOption(request),
-        path: "/",
-        maxAge: Math.floor(maxAgeMs / 1000),
-    });
+    await setSignedCookieIn(await nextCookieStore(), name, token, maxAgeMs, request);
 }
 export async function clearSignedCookie(name) {
-    const jar = await cookies();
-    jar.delete(name);
+    await clearSignedCookieIn(await nextCookieStore(), name);
 }
 export async function readSignedCookie(name) {
-    const jar = await cookies();
-    return jar.get(name)?.value;
+    return readSignedCookieIn(await nextCookieStore(), name);
 }
