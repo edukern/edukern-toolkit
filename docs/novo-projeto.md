@@ -11,6 +11,9 @@ criaria duas versões que divergem com o tempo.
 | Revisão de impacto (agente `revisor-impacto` + regra no `CLAUDE.md` do projeto) | Mesmo repositório | instalada sozinha em repo git pelo hook `install-revisor-impacto.sh` |
 | Código reaproveitável (auth, sessão, CPF, WhatsApp, BRL, novidades) | Este toolkit | `README.md` |
 | Molde de projeto (tokens, ESLint, CI, UI, `CLAUDE.md` de projeto) | Este toolkit | `src/design-tokens.css`, `templates/`, `src/ui/` |
+| Lista de segurança de lançamento (20 pontos) e o que o toolkit já cobre de cada um | Este toolkit | `docs/security-checklist.md` |
+| Quando consultar as listas de segurança e de UX, e como aplicar com critério | Repositório de configurações do Claude | `CLAUDE.md` global, seção "Checklists de auditoria e lançamento" |
+| Heurísticas de UX (10 de Nielsen, 8 Golden Rules de Shneiderman, WCAG) | Repositório de configurações do Claude | `~/.claude/references/ux-ui-standards.md` |
 | Telas de ajuda e novidades | Skills `central-ajuda` e `novidades` (grupo `cultura`) | `claude-global-config`, pasta `skills/`; chegam com `/setup-claude-config` |
 
 ## Checklist
@@ -26,12 +29,14 @@ criaria duas versões que divergem com o tempo.
 5. Tokens: copie `src/design-tokens.css` pro `globals.css` e preencha marca/fonte.
 6. Copie `templates/eslint.config.mjs` e `templates/ci.yml` (`.github/workflows/`).
 7. Antes de escrever infra (auth, sessão, hash, cookie), confira o `README.md`
-   deste toolkit: pode já estar resolvido.
+   deste toolkit: pode já estar resolvido. Se o app tem login ou banco, passe também
+   por `docs/security-checklist.md`, só nos itens que cabem.
 8. Se o app tem usuário final: skills `central-ajuda` e `novidades`.
 
 ## Alimentar o toolkit
 
 Só promova código que 2-3 projetos reais precisam da MESMA forma (regra dos 3).
-Ao promover: revisão de impacto se toca auth/dados, teste, entrada no
+Ao promover: revisão de impacto se toca auth/dados (com `docs/security-checklist.md`
+ao lado), teste, entrada no
 `README.md` e no `CHANGELOG.md` com o achado real que originou. Infra e
 segurança viram dependência versionada; UI e visual viram molde pra copiar.

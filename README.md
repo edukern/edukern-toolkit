@@ -17,6 +17,9 @@ install quebra em build que não instala devDependencies, ex. Vercel).
 
 ## O que tem aqui
 
+Antes de lançar app com login ou banco, a lista de 20 pontos de segurança, com o que cada
+peça daqui cobre, está em `docs/security-checklist.md`.
+
 - `@edukern/toolkit/supabase-client` — cliente Supabase service-role,
   cacheado, server-only. **Importa `server-only` incondicionalmente** — se seu
   projeto também usa esse cliente fora do bundler do Next (script rodado via
