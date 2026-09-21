@@ -41,6 +41,20 @@ install quebra em build que não instala devDependencies, ex. Vercel).
   resolveram o mesmo problema cada um do seu jeito.
 - `@edukern/toolkit/timing-safe-compare` — comparação de string em tempo
   constante, pra códigos/segredos vindos do usuário.
+- `@edukern/toolkit/whatsapp-link` — `buildWhatsAppLink(telefone, mensagem)`
+  monta um link `wa.me` pré-preenchido (sem pagar API do WhatsApp Business).
+  `normalizePhoneBR` decide o DDI por contagem de dígito, não por conteúdo —
+  checar se o número "já começa com 55" erra pra qualquer telefone de DDD 55
+  (Santa Maria/RS). Extraído do `acamp-plan`, que já tinha corrigido esse bug;
+  o `rh-pontoe` (`lib/telefone.js`) resolve o mesmo problema de outro jeito,
+  também correto — confirmado com leitura direta antes de promover, não só
+  por semelhança de nome.
+- `@edukern/toolkit/cpf` — `isValidCpf`/`normalizeCpf`, algoritmo padrão de
+  dígito verificador com guarda contra sequência repetida
+  (`111.111.111-11` passa na conta, nunca é CPF real). Extraído do
+  `acamp-plan`; o `rh-pontoe` já tem o mesmo algoritmo (duplicado em 2
+  arquivos: `CandidaturaForm.jsx` e `FormBancoTalentos.jsx`) — candidato a
+  futura limpeza lá, sem urgência.
 - `@edukern/toolkit/sign-tenant-token` + `@edukern/toolkit/supabase-tenant-client`
   — JWT curto (60s, `jose`) com claim de tenant, pra um client Supabase anon-key
   assumir e a policy de RLS isolar por tenant. Fail-closed (lança sem
@@ -74,9 +88,13 @@ não tem o que fazer com esses dois módulos — nesse caso só `supabase-client
   conteúdo pro `globals.css` de um projeto novo e preencher fonte/cor da
   marca ali. O que garante consistência entre projetos são os *nomes* dos
   tokens (`--color-accent`, `--color-ink`, `--shadow-card`...), não os
-  valores — cada projeto tem sua própria identidade visual. 4 dos 5 projetos
-  atuais (mundialito, proficiencia-ucs, ponto-e-stock, game-box) já seguem
-  essa convenção; o keenfisher tem sistema de tokens próprio, fora de escopo.
+  valores — cada projeto tem sua própria identidade visual. A convenção de
+  nome (`--color-accent`, `--color-ink`...) é seguida por convergência
+  manual entre os projetos, não por import do pacote — nenhum projeto
+  importa este arquivo hoje (confirmado por grep em 2026-09-20, ver
+  `.claude/memory/starter_kit_candidates.md`). ponto-e-stock chegou a
+  divergir (`--color-primary` em vez de `--color-accent`) e foi corrigido;
+  vale reconferir antes de assumir consistência.
 
 ## Pegadinhas que não viraram código
 

@@ -50,6 +50,16 @@
       "import": "./dist/revocable-token.js",
       "default": "./dist/revocable-token.js"
     },
+    "./whatsapp-link": {
+      "types": "./dist/whatsapp-link.d.ts",
+      "import": "./dist/whatsapp-link.js",
+      "default": "./dist/whatsapp-link.js"
+    },
+    "./cpf": {
+      "types": "./dist/cpf.d.ts",
+      "import": "./dist/cpf.js",
+      "default": "./dist/cpf.js"
+    },
     "./design-tokens.css": "./src/design-tokens.css"
   },
   "scripts": {
