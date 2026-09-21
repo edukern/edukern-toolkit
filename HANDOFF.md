@@ -18,11 +18,16 @@
    já passou? (b) sabe onde ficou o parecer original do
    `createAccessGate()`? Só então prototipar DENTRO do `lib/auth/*` do
    mundialito primeiro (não extrair de esboço isolado).
-2. **Skills próprias não estão no backup.** `central-ajuda`, `novidades`,
-   `state-sync-audit`, `design-standards` etc. moram só em `~/.claude/skills/`;
-   `edukern/claude-global-config` não as exporta (`scripts/export.mjs`). Quem
-   clonar os repos não as recebe, e `docs/novo-projeto.md` cita duas delas.
-   Decidir: exportar pro repo privado (recomendado) ou mover pro toolkit.
+2. **Origem de 3 grupos de skills não confirmada** (em `claude-global-config/
+   manifest.json`): `design-web` e `claude-design` foram exportadas sem saber
+   se são suas ou de terceiros; `c-level-squad` idem. Se forem de terceiros
+   com licença, não compartilhar. Outras (`cloudflare`, `ring-default`,
+   `trailofbits`, `bmad`) estão registradas como "provável", sem confirmação.
+3. **Ainda fora do repo central, por decisão ou por não caber:** `settings.local.json`
+   (permissões desta máquina), MCPs com chave (Unsplash: só o comando entra),
+   memória por projeto (`~/.claude/projects/*/memory`), `sync-to-new-machine.ps1`
+   (antigo, substituído pelo `/setup-claude-config`: candidato a apagar) e
+   `claude-code-setup-guide.md` (inventário pessoal de 2026-05-25, desatualizado).
 
 ## ✅ Feito
 
@@ -32,6 +37,11 @@
   de início; aponta pro repo privado `edukern/claude-global-config` (dono da
   cultura: documentação, revisão de impacto, inline vs subagente) em vez de
   copiar regra. Cópia velha de `design-tokens.css` removida de lá.
+- **`claude-global-config` virou central compartilhável:** exporta skills e
+  comandos próprios por grupo (`manifest.json` → `skillGroups`), barra segredo
+  antes de copiar, avisa item novo sem classificação, e o `/setup-claude-config`
+  entrevista a pessoa para montar o `CLAUDE.md` dela (seções `perfil:ID`).
+  Teste: `node --test scripts/apply.test.mjs` naquele repo.
 - **`whatsapp-link`, `cpf`, `password-hash`** — extraídos do `acamp-plan`/
   `rh-pontoe`, com achados reais corrigidos ao promover (ver Changelog).
 - **`session-cookie-core.ts`** — split core testável + casca Next.js.

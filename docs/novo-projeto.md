@@ -11,12 +11,15 @@ criaria duas versões que divergem com o tempo.
 | Revisão de impacto (agente `revisor-impacto` + regra no `CLAUDE.md` do projeto) | Mesmo repositório | instalada sozinha em repo git pelo hook `install-revisor-impacto.sh` |
 | Código reaproveitável (auth, sessão, CPF, WhatsApp, BRL, novidades) | Este toolkit | `README.md` |
 | Molde de projeto (tokens, ESLint, CI, UI, `CLAUDE.md` de projeto) | Este toolkit | `src/design-tokens.css`, `templates/`, `src/ui/` |
-| Telas de ajuda e novidades | Skills globais `central-ajuda` e `novidades` | `~/.claude/skills/` |
+| Telas de ajuda e novidades | Skills `central-ajuda` e `novidades` (grupo `cultura`) | `claude-global-config`, pasta `skills/`; chegam com `/setup-claude-config` |
 
 ## Checklist
 
 1. **Máquina configurada?** Sem o repositório de configurações instalado
-   (`/setup-claude-config`), nada da cultura vale. Instale antes.
+   (`/setup-claude-config`), nada da cultura vale. Instale antes. O comando
+   entrevista a pessoa (nível técnico, estilo de resposta, plano, idioma) e monta
+   o `CLAUDE.md` dela em vez de presumir; o guia de quem está começando é
+   `docs/guia-iniciantes-dev-claude-code.md` naquele repositório.
 2. `git init` + repo privado (`gh repo create --private`), primeiro commit.
 3. Copie `templates/projeto-novo/CLAUDE.md` pra raiz e preencha o topo.
 4. Crie `.claude/memory/MEMORY.md` vazio (índice de memória do projeto).
