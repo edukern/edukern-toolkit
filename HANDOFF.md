@@ -18,16 +18,17 @@
    já passou? (b) sabe onde ficou o parecer original do
    `createAccessGate()`? Só então prototipar DENTRO do `lib/auth/*` do
    mundialito primeiro (não extrair de esboço isolado).
-2. **Origem de 3 grupos de skills não confirmada** (em `claude-global-config/
-   manifest.json`): `design-web` e `claude-design` foram exportadas sem saber
-   se são suas ou de terceiros; `c-level-squad` idem. Se forem de terceiros
-   com licença, não compartilhar. Outras (`cloudflare`, `ring-default`,
-   `trailofbits`, `bmad`) estão registradas como "provável", sem confirmação.
-3. **Ainda fora do repo central, por decisão ou por não caber:** `settings.local.json`
-   (permissões desta máquina), MCPs com chave (Unsplash: só o comando entra),
-   memória por projeto (`~/.claude/projects/*/memory`), `sync-to-new-machine.ps1`
-   (antigo, substituído pelo `/setup-claude-config`: candidato a apagar) e
-   `claude-code-setup-guide.md` (inventário pessoal de 2026-05-25, desatualizado).
+2. **Origem de 3 grupos de skills desconhecida, mantidos por decisão:**
+   `design-web`, `claude-design` e `c-level-squad` (em `claude-global-config/
+   manifest.json`) ficam no repo porque ele é privado. **Reavaliar antes de dar
+   acesso a outra pessoa**, caso venham de terceiros com licença. Outras
+   (`cloudflare`, `ring-default`, `trailofbits`, `bmad`) estão registradas como
+   "provável", sem confirmação.
+3. **Fora do repo central, por decisão ou por não caber:** `settings.local.json`
+   (permissões desta máquina), MCPs com chave (Unsplash: só o comando entra) e
+   memória por projeto (`~/.claude/projects/*/memory`). `sync-to-new-machine.ps1` e
+   `claude-code-setup-guide.md` saíram de `~/.claude` e estão em
+   `~/.claude/backups/*.old-20260921` (apagar de vez quando quiser).
 
 ## ✅ Feito
 
