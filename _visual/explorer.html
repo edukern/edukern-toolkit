@@ -120,6 +120,52 @@ textarea.out { width:100%; height:230px; font:11.5px/1.4 ui-monospace,monospace;
 .pill.ok { background:#e2f2e2; color:#1d5b1d; } .pill.no { background:#f6dada; color:#8a1f1f; } .pill.info { background:#eceae5; color:#55534d; }
 @media (max-width: 900px) { .app { grid-template-columns:1fr; } .panel { height:auto; position:static; } .main { padding:16px; } .phone { zoom:.9; } }
 
+/* ── apresentação: um slide 16:9 por tela (celular + computador), sem seletores; imprime um slide por página ── */
+body.show .panel, body.show .bar, body.show .wcag { display:none; }
+body.show .app { grid-template-columns:1fr; }
+body.show .main { padding:20px 16px 60px; }
+.show-tools { display:none; }
+body.show .show-tools { display:flex; position:fixed; top:12px; right:12px; z-index:20; gap:8px; align-items:center; background:var(--t-card); border:1px solid var(--t-line); border-radius:12px; padding:6px 8px; box-shadow:0 6px 20px rgb(0 0 0/.15); }
+.show-tools button { border:0; border-radius:8px; background:var(--t-ink); color:var(--t-bg); font:inherit; font-weight:600; padding:7px 12px; cursor:pointer; }
+.show-tools button.ghost { background:none; color:var(--t-ink); border:1px solid var(--t-bd); }
+.show-tools small { color:var(--t-faint); font-size:11.5px; max-width:230px; line-height:1.3; }
+.slides { display:grid; gap:28px; justify-items:center; }
+.swrap { width:100%; max-width:1600px; }
+.slide { width:1600px; height:900px; position:relative; overflow:hidden; display:flex; flex-direction:column; padding:44px 56px 38px; background:var(--canvas); color:var(--ink); font-family:var(--fb); border-radius:14px; box-shadow:0 14px 40px rgb(0 0 0/.18); }
+.slide * { box-sizing:border-box; }
+.s-kick { font-size:15px; font-weight:650; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin:0 0 6px; }
+.s-title { font-family:var(--fd); font-weight:var(--tw); letter-spacing:var(--tt); font-size:44px; line-height:1.05; margin:0; color:var(--ink); text-wrap:balance; }
+.s-sub { color:var(--ink-muted); font-size:19px; margin:10px 0 0; max-width:1000px; }
+.s-stage { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; gap:40px; }
+.s-stage .phone { zoom:.9; }
+.s-stage .desk { zoom:.84; }
+.s-foot { display:flex; justify-content:space-between; font-size:13px; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:12px; }
+.s-foot b { color:var(--ink-muted); font-weight:600; }
+.s-cover { flex-direction:row; padding:0; }
+.s-cover .s-band { width:42%; background:var(--accent); color:var(--accent-ink); padding:64px 56px; display:flex; flex-direction:column; justify-content:space-between; }
+.s-cover .s-band .s-title { color:var(--accent-ink); font-size:68px; }
+.s-cover .s-band p { margin:0; font-size:20px; opacity:.85; }
+.s-cover .s-body { flex:1; padding:64px 60px; display:flex; flex-direction:column; gap:34px; }
+.s-sws { display:grid; grid-template-columns:repeat(4, 1fr); gap:14px 18px; }
+.s-sws div { display:flex; align-items:center; gap:12px; font-size:15px; color:var(--ink-muted); }
+.s-sws i { width:46px; height:46px; border-radius:12px; flex:none; box-shadow:inset 0 0 0 1px color-mix(in oklab, var(--ink) 12%, transparent); }
+.s-sws b { display:block; color:var(--ink); font-weight:600; }
+.s-type { display:flex; gap:40px; align-items:flex-end; }
+.s-type .aa { font-family:var(--fd); font-weight:var(--tw); font-size:120px; line-height:.9; color:var(--ink); }
+.s-type p { margin:0; font-size:17px; color:var(--ink-muted); }
+.s-type p b { color:var(--ink); font-size:22px; display:block; }
+.s-h { font-size:13px; font-weight:650; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 12px; }
+.s-board { width:2300px; zoom:.62; }
+@page { size:1600px 900px; margin:0; }
+@media print {
+  body { background:#fff; }
+  body.show .main { padding:0; }
+  .show-tools { display:none !important; }
+  .slides { gap:0; }
+  .swrap { max-width:none; }
+  .slide { zoom:1 !important; border-radius:0; box-shadow:none; break-after:page; }
+}
+
 /* ══ PEÇAS DO PREVIEW ══
    Base neutra; cada estilo reescreve a receita POR PEÇA. Atributos no quadro (celular ou computador):
    data-style = base (fundo, avatar, avisos, medidores) · data-xt = títulos e cabeçalho · data-xc = cartões e listas
@@ -490,6 +536,7 @@ textarea.out { width:100%; height:230px; font:11.5px/1.4 ui-monospace,monospace;
 [data-xn=outline] .scr .side .it.on { background:transparent; box-shadow:inset 0 0 0 1.5px var(--ink); }
 </style>
 
+<div class="show-tools"><small id="showHint">Um slide por tela, no celular e no computador.</small><button id="printBtn">Salvar PDF</button><button class="ghost" id="exitShow">Voltar ao explorador</button></div>
 <div class="app">
   <aside class="panel">
     <section class="sec">
@@ -549,7 +596,7 @@ textarea.out { width:100%; height:230px; font:11.5px/1.4 ui-monospace,monospace;
 
   <main class="main">
     <div class="bar">
-      <div class="seg3" id="views"><button data-v="proto">Protótipo</button><button data-v="telas">Todas as telas</button><button data-v="estilos">Estilos lado a lado</button><button data-v="comparar">Fixadas</button></div>
+      <div class="seg3" id="views"><button data-v="proto">Protótipo</button><button data-v="telas">Todas as telas</button><button data-v="estilos">Estilos lado a lado</button><button data-v="comparar">Fixadas</button><button data-v="apres">Apresentação</button></div>
       <div class="seg3" id="devs"><button data-d="cel">Celular</button><button data-d="pc">Computador</button><button data-d="ambos">Os dois</button></div>
       <select id="varySel" title="O que muda entre os quadros"></select>
       <select id="ctxSel" title="Tela mostrada"></select>
@@ -567,6 +614,7 @@ textarea.out { width:100%; height:230px; font:11.5px/1.4 ui-monospace,monospace;
    sem ele, o html() do celular aparece numa coluna). Navegação: data-go="Nome da tela".
    Alternar: data-one (um só no grupo) ou data-tog (liga/desliga). */
 const PROJETO = 'biz-assistant';
+const NOME = 'Biz Assistant';
 const NAV = [['agenda','Agenda','Agenda do dia'],['clientes','Clientes','Clientes'],['caixa','Caixa','Caixa do mês'],['mais','Ajustes','Ajustes']];
 const MARCA = 'Studio Ana';
 const ICONS = {
@@ -588,13 +636,13 @@ const loginForm = () => `${field('E-mail','ana@studio.com.br',{val:1})}${field('
   <div class="gap"></div><button class="btn pri full" data-go="Agenda do dia">Entrar</button><button class="btn sec full">Criar conta</button>`;
 
 const CONTEXTS = [
-  { name:'Entrar', nav:null, html:() => `
+  { name:'Entrar', desc:'Acesso com e-mail e senha; quem ligou o código de 2 fatores confirma no app autenticador.', nav:null, html:() => `
     <div class="hero"><div class="mark"></div><p class="kick">Biz Assistant</p><h1 class="ttl">Entrar</h1><p class="body">Sua agenda, cobranças e caixa num lugar só.</p></div>
     <div class="sheet"><div class="card pad">${loginForm()}</div><p class="link">Esqueci a senha</p></div>`,
     desk:() => `<div class="dk-login">
     <div class="hero"><div class="mark"></div><p class="kick">Biz Assistant</p><h1 class="ttl">Sua agenda, cobranças e caixa num lugar só.</h1><p class="body">Entre para ver os horários de hoje.</p></div>
     <div class="sheet"><div class="card pad"><h1 class="ttl" style="font-size:calc(22px*var(--ts));margin-bottom:16px">Entrar</h1>${loginForm()}</div><p class="link">Esqueci a senha</p></div></div>` },
-  { name:'Agenda do dia', nav:0, html:() => `
+  { name:'Agenda do dia', desc:'O dia em uma olhada: quem vem, o que já foi pago e os horários livres para encaixe.', nav:0, html:() => `
     <header class="hd"><div><p class="kick">Terça, 14 de outubro</p><h1 class="ttl">Agenda de hoje</h1></div><div class="avatar">JS</div></header>
     <div class="seg"><span class="on" data-one>Hoje</span><span data-one>Amanhã</span><span data-one>Semana</span></div>
     <div class="card">${agendaRows()}</div>
@@ -605,7 +653,7 @@ const CONTEXTS = [
     <div class="dk-stack"><div class="stats"><div class="stat"><p class="l">Hoje</p><p class="n">5 clientes</p></div><div class="stat"><p class="l">A receber</p><p class="n">R$ 120</p></div></div>
       <div class="alert wait"><b>A cobrar</b>Bruno Lima ainda não pagou a barba de hoje.</div>
       <div class="card pad"><p class="nm">Ocupação da semana</p><div class="meter"><i style="width:68%"></i></div><p class="faint" style="margin-top:6px">68% dos horários preenchidos</p></div></div></div>` },
-  { name:'Novo horário', nav:0, html:() => `
+  { name:'Novo horário', desc:'Marcar em três toques: cliente, serviço e um dos horários livres, com lembrete por WhatsApp.', nav:0, html:() => `
     ${back('Agenda do dia','Agenda')}
     <header class="hd"><div><p class="kick">Agenda</p><h1 class="ttl">Marcar horário</h1></div></header>
     <div class="card pad">
@@ -618,7 +666,7 @@ const CONTEXTS = [
     <div class="gap"></div>
     <div class="card"><div class="row"><p class="grow">Valor</p><span class="money">R$ 80,00</span></div>${sw('Lembrete por WhatsApp 1 dia antes', true)}</div>
     <div class="gap"></div><button class="btn pri full" data-go="Agenda do dia">Confirmar horário</button>` },
-  { name:'Clientes', nav:1, html:() => `
+  { name:'Clientes', desc:'Busca por nome ou telefone e a situação de cada cliente: ativo, latente, reagendar, com pacote.', nav:1, html:() => `
     <header class="hd"><div><p class="kick">148 clientes</p><h1 class="ttl">Clientes</h1></div><div class="avatar">JS</div></header>
     <div class="inp"><svg class="ico" viewBox="0 0 24 24">${ICONS.busca}</svg>Buscar pelo nome ou telefone</div>
     <div class="gap"></div>
@@ -635,7 +683,7 @@ const CONTEXTS = [
     <div class="card pad"><div class="line"><div class="avatar xl">AS</div><div><p class="nm">Ana Souza</p><p class="faint">cliente desde mar/2025</p></div></div>
       <div class="gap"></div><div class="stats"><div class="stat"><p class="l">Visitas</p><p class="n">14</p></div><div class="stat"><p class="l">Gasto no ano</p><p class="n">R$ 840</p></div></div>
       <div class="gap"></div><div class="line"><button class="btn sec sm">WhatsApp</button><button class="btn pri sm" data-go="Novo horário">Marcar horário</button></div></div></div>` },
-  { name:'Ficha do cliente', nav:1, html:() => `
+  { name:'Ficha do cliente', desc:'Histórico de visitas, uso do pacote e contato direto pelo WhatsApp.', nav:1, html:() => `
     ${back('Clientes','Clientes')}
     <div class="hd" style="justify-content:flex-start;align-items:center"><div class="avatar xl">AS</div><div><h1 class="ttl">Ana Souza</h1><p class="faint">(11) 98888-7777 · cliente desde mar/2025</p></div></div>
     <div class="line"><button class="btn sec sm">WhatsApp</button><button class="btn pri sm" data-go="Novo horário">Marcar horário</button></div>
@@ -647,7 +695,7 @@ const CONTEXTS = [
     <div class="card pad"><p class="nm">Pacote 5 cortes</p><div class="meter"><i style="width:60%"></i></div><p class="faint" style="margin-top:6px">3 de 5 usados · vence em 20/11</p></div>
     <div class="gap"></div>
     <div class="card">${sw('Aceita mensagens de novidades', false)}</div>` },
-  { name:'Caixa do mês', nav:2, html:() => `
+  { name:'Caixa do mês', desc:'Os três números do mês: venda, o que caiu na conta e o resultado, com o que falta receber.', nav:2, html:() => `
     <header class="hd"><div><p class="kick">Fechamento</p><h1 class="ttl">Caixa do mês</h1></div><div class="avatar">JS</div></header>
     ${dd(['Setembro de 2026','Agosto de 2026','Julho de 2026'])}
     <div class="gap"></div>${statsCaixa(false)}
@@ -659,7 +707,7 @@ const CONTEXTS = [
     <div class="dk-2"><div class="card"><table class="tbl"><thead><tr><th>Data</th><th>Cliente</th><th>Forma</th><th class="num">Valor</th></tr></thead><tbody>
       ${[['14/10','Ana Souza','Pix','R$ 60,00'],['14/10','Carla Reis','Pacote','R$ 250,00'],['13/10','Diego Alves','Crédito','R$ 110,00'],['13/10','Fábio Nunes','Dinheiro','R$ 60,00'],['12/10','Bruno Lima','Pix','R$ 40,00']].map(r => `<tr>${r.map((x, i) => `<td${i === 3 ? ' class="num"' : ''}>${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
     <div class="dk-stack"><div class="alert wait"><b>A receber</b>R$ 1.980 de 12 atendimentos ainda sem cobrança.</div>${formasCard()}</div></div>` },
-  { name:'Ajustes', nav:3, html:() => { const g = uid(); return `
+  { name:'Ajustes', desc:'Serviços, horários, equipe, aparência pessoal, avisos e segurança da conta.', nav:3, html:() => { const g = uid(); return `
     <header class="hd"><div><p class="kick">${MARCA}</p><h1 class="ttl">Ajustes</h1></div><div class="avatar">JS</div></header>
     <div class="card">${['Serviços e preços','Horários de trabalho','Equipe'].map(t => `<div class="row"><p class="grow">${t}</p><span class="chev"></span></div>`).join('')}</div>
     <p class="subh">Aparência</p>
@@ -895,7 +943,7 @@ function geom(s) {
 
 /* ── estado (guardado no navegador) ── */
 const KEY = 'explorador-visual-v3:' + PROJETO;
-const DEFAULT = { style:START.style, rf:{...styleOf(START.style).d}, ax:axesOf(START.style), accent:START.accent, bg:START.bg, contrast:'medio', fd:START.fd, fb:START.fb,
+const DEFAULT = { style:START.style, rf:{...styleOf(START.style).d}, ax:START.ax || axesOf(START.style), accent:START.accent, bg:START.bg, contrast:START.contrast || 'medio', fd:START.fd, fb:START.fb,
   view:'proto', dev:'ambos', vary:'all', ctx:1, pctx:1, pins:[], ftab:'fd', fcat:'all' };
 let S;
 try { S = {...DEFAULT, ...JSON.parse(localStorage.getItem(KEY) || '{}')}; } catch { S = {...DEFAULT}; }
@@ -1033,6 +1081,8 @@ function buildPanel() {
     const d = e.target.closest('details.multi'); if (!d) return;
     d.querySelector('.tags').innerHTML = [...d.querySelectorAll('input:checked')].map(i => `<span class="tag">${i.value}</span>`).join('') || '<span class="faint">Escolha…</span>';
   });
+  $('#exitShow').onclick = () => { S.view = 'proto'; update(); };
+  $('#printBtn').onclick = () => { try { window.print(); } catch {} $('#showHint').textContent = 'Se a janela de impressão não abriu (link publicado), abra o arquivo do toolkit no computador ou peça o PDF ao Claude.'; };
   let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(rezoom, 80); });
 }
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { io.unobserve(e.target); previewFont(e.target.dataset.f); } }));
@@ -1108,7 +1158,10 @@ function cell(s, ctx, title, btns = [], proto) {
   if (proto) fr.querySelectorAll('.frame').forEach(f => f.dataset.proto = '1');
   w.append(hd, fr); return w;
 }
-function rezoom() { $$('.dwrap').forEach(w => { w.firstElementChild.style.zoom = Math.min(1, (w.clientWidth - 4) / 1180); }); }
+function rezoom() {
+  $$('.dwrap').forEach(w => { w.firstElementChild.style.zoom = Math.min(1, (w.clientWidth - 4) / 1180); });
+  $$('.swrap').forEach(w => { w.firstElementChild.style.zoom = Math.min(1, w.clientWidth / 1600); });
+}
 function boardCell(s) {
   const w = document.createElement('div'); w.className = 'cell wide';
   w.innerHTML = `<header><b>Componentes</b></header><div class="boardwrap"><div class="scr board"><div class="pg">${BOARD()}</div></div></div>`;
@@ -1118,6 +1171,8 @@ function boardCell(s) {
 const axisLine = s => AXES.filter(([k]) => s.ax[k] !== s.style).map(([k, l]) => `${l}: ${styleOf(s.ax[k]).name}`).join(' · ');
 function render() {
   const stage = $('#stage');
+  document.body.classList.toggle('show', S.view === 'apres');
+  if (S.view === 'apres') { stage.innerHTML = ''; stage.className = 'slides'; slides().forEach(sl => { const w = document.createElement('div'); w.className = 'swrap'; w.appendChild(sl); stage.appendChild(w); }); rezoom(); return; }
   stage.innerHTML = ''; stage.className = 'stage' + (S.view === 'estilos' ? ' small' : '');
   let note = '';
   if (S.view === 'proto') {
@@ -1156,6 +1211,29 @@ function render() {
     + `<div class="wl"><span>Separação entre fundo e cartão</span><span class="pill info">${sep.toFixed(2)}:1 · ${sep < 1.04 ? 'quase invisível (no Flat o cartão some)' : sep < 1.1 ? 'sutil' : 'clara'}</span></div>`;
 }
 function update() { save(); sync(); render(); }
+
+/* ── apresentação para aprovar a direção visual ── */
+function slides() {
+  const total = CONTEXTS.length + 2, hoje = new Date().toLocaleDateString('pt-BR', { day:'numeric', month:'long', year:'numeric' });
+  const t = derive(S), st = styleOf(S.style), mix = axisLine(S);
+  const foot = n => `<div class="s-foot"><span><b>${NOME}</b> · Direção visual</span><span>${n} / ${total}</span></div>`;
+  const mk = html => { const el = document.createElement('section'); el.className = 'slide'; dress(el, S); el.innerHTML = html; return el; };
+  const out = [];
+  const capa = mk(`<div class="s-band"><div><p>${hoje}</p></div><div><p style="margin-bottom:14px">Direção visual</p><h1 class="s-title">${NOME}</h1></div></div>
+    <div class="s-body"><div><p class="s-h">Cores</p><div class="s-sws">${[['Acento', 'accent', accName() || okToHex(S.accent)], ['Fundo', 'canvas', 'página'], ['Cartão', 'surface', 'superfícies'], ['Texto', 'ink', 'principal'], ['Texto de apoio', 'ink-muted', 'secundário'], ['Confirmado', 'success', 'estado'], ['Atenção', 'warning', 'estado'], ['Erro', 'danger', 'estado']]
+      .map(([n, k, d]) => `<div><i style="background:var(--${k})"></i><span><b>${n}</b>${d}</span></div>`).join('')}</div></div>
+      <div><p class="s-h">Tipografia</p><div class="s-type"><span class="aa">Aa</span><p><b>${S.fd}</b>títulos</p><p><b>${S.fb}</b>texto</p></div></div>
+      <div><p class="s-h">Estilo</p><p class="s-sub" style="margin:0">${st.name}${mix ? ` · ${mix}` : ''}. ${st.recipe.charAt(0).toUpperCase() + st.recipe.slice(1)}</p></div></div>`);
+  capa.classList.add('s-cover'); out.push(capa);
+  CONTEXTS.forEach((c, i) => {
+    const sl = mk(`<p class="s-kick">Tela ${i + 1}</p><h2 class="s-title">${c.name}</h2>${c.desc ? `<p class="s-sub">${c.desc}</p>` : ''}<div class="s-stage"></div>${foot(i + 2)}`);
+    sl.querySelector('.s-stage').append(frame(S, 'phone', i), frame(S, 'desk', i));
+    out.push(sl);
+  });
+  const pecas = mk(`<p class="s-kick">Peças</p><h2 class="s-title">Componentes</h2><p class="s-sub">Botões, campos, seleção, avisos e navegação no mesmo estilo, para qualquer tela nova.</p><div class="s-stage"><div class="s-board boardwrap"><div class="scr board"><div class="pg">${BOARD()}</div></div></div></div>${foot(total)}`);
+  dress(pecas.querySelector('.boardwrap'), S); out.push(pecas);
+  return out;
+}
 
 function summary() {
   const st = styleOf(S.style), t = derive(S), mix = axisLine(S);
