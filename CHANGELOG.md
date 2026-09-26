@@ -6,6 +6,13 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 
 ## Não lançado
 
+- feat: `_visual/explorer.html` v2 (dono único; a cópia em `~/.claude/templates` saiu, já
+  divergia sem o conserto de contraste). Estilo primeiro, com 10 estilos que mudam a receita
+  das peças e galeria lado a lado; cor = acento + par de fundos, com o resto da paleta derivado
+  e contraste WCAG calculado; busca em ~100 Google Fonts ou qualquer nome; protótipo navegável +
+  quadro de componentes (lista suspensa, várias escolhas, marcação, interruptor, avisos, diálogo,
+  tabela); dado para sortear cada decisão; comparação de combinações fixadas; estado no endereço.
+  Por projeto, editar só o bloco `PROJETO` (telas e ponto de partida).
 - docs: `docs/novo-projeto.md` (checklist + dono de cada assunto, aponta pro
   repositório de configurações do Claude em vez de copiar regra) e
   `templates/projeto-novo/CLAUDE.md`.
