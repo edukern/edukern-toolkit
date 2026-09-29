@@ -6,6 +6,9 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 
 ## Não lançado
 
+- feat: `invite-link` (`createInvite`, `inviteUrl`, `inviteStatus`) — convite por
+  link para criação de conta, com o hash no banco e o token só na URL, mais a
+  receita SQL da reivindicação atômica que impede o mesmo link virar duas contas.
 - feat: `_visual/explorer.html` v2 (dono único; a cópia em `~/.claude/templates` saiu, já
   divergia sem o conserto de contraste). Estilo primeiro, com 10 estilos que mudam a receita
   das peças e galeria lado a lado; cor = acento + par de fundos, com o resto da paleta derivado

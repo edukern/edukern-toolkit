@@ -97,6 +97,13 @@ peça daqui cobre, está em `docs/security-checklist.md`.
   (lá acoplado a Prisma; aqui, storage-agnostic). Não substitui
   `signed-session` — use quando precisar revogar sessão do lado do servidor
   (`signed-session` é stateless, não dá pra revogar antes de expirar).
+- `@edukern/toolkit/invite-link` — convite por link ("link mágico") para criar
+  conta sem senha inicial compartilhada: `createInvite(baseUrl, basePath, hashToken)`
+  devolve o token do link junto do hash que vai pro banco (nunca o token cru),
+  `inviteUrl` monta o endereço e `inviteStatus` classifica válido/usado/revogado/
+  expirado. A tabela é sua; o módulo documenta a trava que importa — reivindicar o
+  convite num `update` condicional com `returning`, na MESMA transação que cria a
+  conta, para o mesmo link nunca virar duas contas. Extraído do `stg-portal`.
 
 Extraído do padrão usado em `mundialito` (`lib/auth/session.ts`,
 `lib/auth/cookie.ts`, `lib/supabase/server.ts`, `lib/auth/verify-code.ts`) —

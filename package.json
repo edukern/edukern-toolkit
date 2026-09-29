@@ -50,6 +50,11 @@
       "import": "./dist/revocable-token.js",
       "default": "./dist/revocable-token.js"
     },
+    "./invite-link": {
+      "types": "./dist/invite-link.d.ts",
+      "import": "./dist/invite-link.js",
+      "default": "./dist/invite-link.js"
+    },
     "./whatsapp-link": {
       "types": "./dist/whatsapp-link.d.ts",
       "import": "./dist/whatsapp-link.js",
