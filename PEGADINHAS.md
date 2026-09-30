@@ -40,3 +40,22 @@ Achado no `rh-pontoe` (`lib/auth.js`, tabela `admin_sessions`).
 do token recebido — é o que `revocable-token` faz pra token opaco. O princípio vale
 mesmo fora desse módulo específico: invite token, link de reset de senha, API key
 persistida etc.
+
+## Redirect cross-origin descarta o `Authorization` (401 silencioso em sync entre sistemas)
+
+`fetch` joga fora o header `Authorization` quando segue um redirect para outra origem, e
+`dominio.com` → `www.dominio.com` conta como outra origem. Chamada servidor-a-servidor que bate
+no domínio "errado" recebe 308, reenvia sem o header e volta 401, sem nada que aponte o redirect.
+
+Achado no sync do Placar (`ponto-e-hr-solution`, 16/set/2026).
+
+**Evitar:** gravar a URL de integração já no domínio final (com ou sem `www`, o que for o canônico).
+Junto, toda rota de sync/webhook precisa de chave de deduplicação (upsert por chave natural), para
+reenvio não duplicar: o Placar rodou 2 vezes e seguiu com 50 linhas.
+
+## Busca com ranking e tolerância a erro: usar o Postgres, não construir índice
+
+Busca por relevância e "fracoes" achando "frações" parece pedir índice invertido/TF-IDF próprio
+(os tutoriais de `build-your-own-x` ensinam isso). Com Supabase já vem pronto: coluna `tsvector`
+com config `portuguese` (+ índice GIN, ordenação por `ts_rank`) e extensão `pg_trgm` para erro de
+digitação. Só pensar em motor externo se o volume passar de centenas de milhares de linhas.
