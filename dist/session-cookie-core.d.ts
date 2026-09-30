@@ -21,5 +21,9 @@ export interface CookieSetOptions {
 }
 /** Grava um token de sessão (ver `signed-session`) num cookie httpOnly seguro. */
 export declare function setSignedCookieIn(store: CookieStore, name: string, token: string, maxAgeMs: number, request?: RequestLike): Promise<void>;
-export declare function clearSignedCookieIn(store: CookieStore, name: string): Promise<void>;
+/**
+ * Apaga gravando vazio com as MESMAS opções do set. `delete` manda sem `Secure`, e o navegador
+ * ignora isso num cookie `__Host-` (a sessão continuaria valendo).
+ */
+export declare function clearSignedCookieIn(store: CookieStore, name: string, request?: RequestLike): Promise<void>;
 export declare function readSignedCookieIn(store: CookieStore, name: string): Promise<string | undefined>;

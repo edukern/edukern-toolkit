@@ -19,8 +19,8 @@ async function nextCookieStore() {
 export async function setSignedCookie(name, token, maxAgeMs, request) {
     await setSignedCookieIn(await nextCookieStore(), name, token, maxAgeMs, request);
 }
-export async function clearSignedCookie(name) {
-    await clearSignedCookieIn(await nextCookieStore(), name);
+export async function clearSignedCookie(name, request) {
+    await clearSignedCookieIn(await nextCookieStore(), name, request);
 }
 export async function readSignedCookie(name) {
     return readSignedCookieIn(await nextCookieStore(), name);

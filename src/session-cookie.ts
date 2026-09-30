@@ -39,8 +39,8 @@ export async function setSignedCookie(
   await setSignedCookieIn(await nextCookieStore(), name, token, maxAgeMs, request);
 }
 
-export async function clearSignedCookie(name: string): Promise<void> {
-  await clearSignedCookieIn(await nextCookieStore(), name);
+export async function clearSignedCookie(name: string, request?: RequestLike): Promise<void> {
+  await clearSignedCookieIn(await nextCookieStore(), name, request);
 }
 
 export async function readSignedCookie(name: string): Promise<string | undefined> {

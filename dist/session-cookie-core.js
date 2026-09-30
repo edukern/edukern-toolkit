@@ -10,8 +10,18 @@ export async function setSignedCookieIn(store, name, token, maxAgeMs, request) {
         maxAge: Math.floor(maxAgeMs / 1000),
     });
 }
-export async function clearSignedCookieIn(store, name) {
-    await store.delete(name);
+/**
+ * Apaga gravando vazio com as MESMAS opções do set. `delete` manda sem `Secure`, e o navegador
+ * ignora isso num cookie `__Host-` (a sessão continuaria valendo).
+ */
+export async function clearSignedCookieIn(store, name, request) {
+    await store.set(name, "", {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: resolveSecureCookieOption(request),
+        path: "/",
+        maxAge: 0,
+    });
 }
 export async function readSignedCookieIn(store, name) {
     return store.get(name);

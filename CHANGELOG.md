@@ -6,6 +6,12 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 
 ## Não lançado
 
+## v0.4.0
+
+- fix: `clearSignedCookie`/`clearSignedCookieIn` gravam o cookie vazio com `maxAge: 0` e as mesmas
+  opções do set, em vez de `cookies().delete`. O delete sai sem `Secure`, e o navegador ignora isso
+  num cookie `__Host-`: o "sair" não derrubava a sessão. Aceita `request` opcional, como o set.
+  Achado do revisor-impacto no painel da equipe do `coworking`.
 - feat: `invite-link` (`createInvite`, `inviteUrl`, `inviteStatus`) — convite por
   link para criação de conta, com o hash no banco e o token só na URL, mais a
   receita SQL da reivindicação atômica que impede o mesmo link virar duas contas.
@@ -85,8 +91,6 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
   convenção copiada, não por dependência real. Button/Card seguem NÃO
   extraídos (regra dos 3 seguindo em vigor); ver
   `.claude/memory/project_frontend_scope.md`.
-
-## v0.4.0
 
 - feat: `design-tokens.css` — primeira peça de front-end do toolkit (as
   demais eram lógica de infra/auth). Esqueleto de design tokens Tailwind v4

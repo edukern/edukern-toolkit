@@ -23,11 +23,20 @@ test("grava e lê um cookie de sessão", async () => {
     await setSignedCookieIn(store, "session", "token-abc", 60_000);
     assert.equal(await readSignedCookieIn(store, "session"), "token-abc");
 });
-test("limpa o cookie", async () => {
-    const { store } = fakeStore();
-    await setSignedCookieIn(store, "session", "token-abc", 60_000);
-    await clearSignedCookieIn(store, "session");
-    assert.equal(await readSignedCookieIn(store, "session"), undefined);
+test("limpa o cookie com as mesmas opções do set (Secure incluso, para cookie __Host-)", async () => {
+    const { store, getLastOptions } = fakeStore();
+    process.env.AUTH_COOKIE_SECURE = "true";
+    try {
+        await setSignedCookieIn(store, "session", "token-abc", 60_000);
+        await clearSignedCookieIn(store, "session");
+    }
+    finally {
+        delete process.env.AUTH_COOKIE_SECURE;
+    }
+    assert.equal(await readSignedCookieIn(store, "session"), "");
+    assert.equal(getLastOptions()?.maxAge, 0);
+    assert.equal(getLastOptions()?.secure, true);
+    assert.equal(getLastOptions()?.path, "/");
 });
 test("converte maxAgeMs pra segundos, arredondado pra baixo", async () => {
     const { store, getLastOptions } = fakeStore();
