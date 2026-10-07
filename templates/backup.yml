@@ -1,0 +1,46 @@
+name: Backup do banco
+
+# Cópia diária do banco (o Supabase grátis não guarda backup). Guarda 7 dias, como artefato
+# deste repositório privado. Segredo SUPABASE_DB_URL = Supabase → Connect → "Session pooler" (URI),
+# com a senha do banco. A conexão direta (db.<ref>.supabase.co) é só IPv6 e o GitHub não alcança.
+# O artefato sai sem cifra: quem lê o repo lê o banco. Vale enquanto o único com acesso é o dono
+# do repo; com colaborador ou dado de cliente, cifrar antes do upload (age com chave pública).
+#
+# Restaurar (só com o ok do dono; em projeto novo ou vazio):
+#   gh run download <run-id> -n backup-banco
+#   psql --single-transaction -v ON_ERROR_STOP=1 -f roles.sql -f schema.sql \
+#     -c 'SET session_replication_role = replica' -f data.sql -d "<URI do projeto de destino>"
+
+on:
+  schedule:
+    - cron: "17 6 * * *" # 03h17 em Brasília
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # O CLI roda o pg_dump na versão do servidor (via Docker), sem descasar versão.
+      # Ação e CLI fixados (v3.0.1 / 2.120.0): este job lê o banco inteiro; subir versão de propósito.
+      - uses: supabase/setup-cli@45a513f8c64c0bc8e0e3dfe572b5c95be85f6359
+        with:
+          version: 2.120.0
+
+      - name: Papéis, estrutura e dados
+        env:
+          DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          supabase db dump --db-url "$DB_URL" -f roles.sql --role-only
+          supabase db dump --db-url "$DB_URL" -f schema.sql
+          supabase db dump --db-url "$DB_URL" -f data.sql --use-copy --data-only
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backup-banco
+          path: "*.sql"
+          retention-days: 7
+          if-no-files-found: error

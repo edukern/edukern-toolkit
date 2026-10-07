@@ -144,7 +144,7 @@ e o checklist de início.
 
 ## Templates (`templates/`)
 
-`eslint.config.mjs` e `ci.yml` genéricos pra copiar num projeto novo. Ver
+`eslint.config.mjs`, `ci.yml` e `backup.yml` (cópia diária do Supabase grátis) pra copiar num projeto novo. Ver
 `templates/README.md`.
 
 ## Kit de UI (`src/ui/`)

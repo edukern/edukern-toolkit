@@ -28,6 +28,23 @@ que seu projeto precisa em build time (ou remova o bloco `env:` se não
 precisar de nenhuma). Se o projeto não usa Supabase, tire a linha do
 comentário sobre RLS também.
 
+## `backup.yml`
+
+Vai em `.github/workflows/backup.yml` de todo projeto com Supabase **grátis** (o plano grátis não
+guarda cópia restaurável). Cópia diária com `supabase db dump`, 7 dias como artefato do repo privado.
+Fonte: `beyond-the-game` (07/10/2026), primeira cópia conferida tabela por tabela.
+
+Para ligar, o dono do banco (nunca o Claude) cola em GitHub → Settings → Secrets and variables →
+Actions o segredo `SUPABASE_DB_URL`: Supabase → **Connect** → **Session pooler** → URI, com
+`[YOUR-PASSWORD]` trocado pela senha do banco (montar no Bloco de Notas e fechar sem salvar). Trocar
+a senha do banco não afeta app que usa só as chaves da API. Depois: `gh workflow run backup.yml` e
+conferir só nomes de tabela e contagem de linhas do artefato, nunca o conteúdo.
+
+Pegadinhas: a conexão "Direct" é só IPv6 e o GitHub não alcança (por isso Session pooler); a
+"Transaction pooler" não serve para `pg_dump`. Ação e CLI ficam fixados (SHA e versão) porque o job
+lê o banco inteiro. Artefato sem cifra: só serve em repo onde o único leitor é o dono do banco;
+com colaborador ou dado de cliente, cifrar antes do upload.
+
 ## `projeto-novo/CLAUDE.md`
 
 `CLAUDE.md` mínimo de projeto: só referencia a cultura global e mantém as regras
