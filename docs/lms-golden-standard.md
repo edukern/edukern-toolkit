@@ -27,6 +27,11 @@ do aluno num curso mora na Matrícula**, não espalhado em tabelas soltas — um
 o resto só referencia de volta. Mesma lógica de "fonte única da verdade" que vale pra
 qualquer domínio, não só educação.
 
+**Progresso visível puxa a conclusão.** Mostrar quanto falta ("3 de 5 módulos") e contar como
+progresso o que o aluno já fez (matrícula, primeira aula) aumenta a taxa de conclusão: é o
+efeito do gradiente de meta, explicado em `~/.claude/references/ux-ui-standards.md` (seção 2).
+O número exibido sai do Progresso por módulo da Matrícula, nunca de um contador à parte.
+
 ## 2. Convenção de camadas (padrão genérico, não exclusivo de nenhum stack)
 
 ```

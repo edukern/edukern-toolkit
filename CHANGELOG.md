@@ -6,6 +6,11 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
 
 ## Não lançado
 
+- ui (copiar, não empacotado): `Button` passa a ter 44px de altura e largura mínima em tela de
+  toque (`pointer-coarse:`, Tailwind 4.1+); com mouse continua 32px (`sm`) e 40px (`md`). Quem
+  já copiou o botão antes fica com a versão antiga, por desenho (copiar uma vez, sem sync).
+- docs: `lms-golden-standard.md` liga o Progresso por módulo ao efeito do gradiente de meta.
+
 ## v0.4.0
 
 - fix: `clearSignedCookie`/`clearSignedCookieIn` gravam o cookie vazio com `maxAge: 0` e as mesmas

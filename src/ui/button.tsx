@@ -12,7 +12,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const base =
   "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors " +
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent " +
-  "disabled:opacity-50 disabled:pointer-events-none";
+  "disabled:opacity-50 disabled:pointer-events-none pointer-coarse:min-w-11";
 
 const variants: Record<Variant, string> = {
   primary: "bg-accent text-accent-ink hover:bg-accent-hover",
@@ -21,9 +21,11 @@ const variants: Record<Variant, string> = {
   danger: "bg-danger text-accent-ink hover:opacity-90",
 };
 
+// Em tela de toque (pointer-coarse) todo botão sobe para 44px, o alvo mínimo confortável
+// (Apple HIG/Material); com mouse fica o tamanho visual de cada variante.
 const sizes: Record<Size, string> = {
-  sm: "h-8 px-3 text-sm",
-  md: "h-10 px-4 text-sm",
+  sm: "h-8 px-3 text-sm pointer-coarse:h-11",
+  md: "h-10 px-4 text-sm pointer-coarse:h-11",
 };
 
 export function buttonClassName(
