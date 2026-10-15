@@ -49,6 +49,10 @@ peça daqui cobre, está em `docs/security-checklist.md`.
   login quebra atrás de um proxy que termina TLS antes do processo Node (LAN
   on-prem) — achado real em 2 repos (`ponto-e-stock`, `keenfisher-repo`) que
   resolveram o mesmo problema cada um do seu jeito.
+- `@edukern/toolkit/system-switch-pass` — passe de 60s para trocar de sistema já logado
+  (financeiro → RH, financeiro → estoque), com `aud` por destino, jti de uso único e origem de volta
+  validada. O desenho completo (rota de entrada, queima do jti, botão "Voltar") está em
+  `docs/switcher-entre-sistemas.md`.
 - `@edukern/toolkit/timing-safe-compare` — comparação de string em tempo
   constante, pra códigos/segredos vindos do usuário.
 - `@edukern/toolkit/whatsapp-link` — `buildWhatsAppLink(telefone, mensagem)`

@@ -20,6 +20,11 @@
       "import": "./dist/signed-session.js",
       "default": "./dist/signed-session.js"
     },
+    "./system-switch-pass": {
+      "types": "./dist/system-switch-pass.d.ts",
+      "import": "./dist/system-switch-pass.js",
+      "default": "./dist/system-switch-pass.js"
+    },
     "./timing-safe-compare": {
       "types": "./dist/timing-safe-compare.d.ts",
       "import": "./dist/timing-safe-compare.js",
