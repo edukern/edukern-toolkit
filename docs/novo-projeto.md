@@ -32,6 +32,7 @@ criaria duas versões que divergem com o tempo.
    deste toolkit: pode já estar resolvido. Se o app tem login ou banco, passe também
    por `docs/security-checklist.md`, só nos itens que cabem.
 8. Se o app tem usuário final: skills `central-ajuda` e `novidades`.
+9. Se precisar de landing page ou página de vendas: skill `/lp` (discovery → wireframe → build → deploy automático).
 9. Banco no Supabase grátis: copie `templates/backup.yml` (cópia diária, 7 dias) e ligue antes do
    primeiro usuário real. Passo a passo em `templates/README.md`.
 
