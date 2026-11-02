@@ -11,7 +11,8 @@ criaria duas versões que divergem com o tempo.
 | Revisão de impacto (agente `revisor-impacto` + regra no `CLAUDE.md` do projeto) | Mesmo repositório | instalada sozinha em repo git pelo hook `install-revisor-impacto.sh` |
 | Código reaproveitável (auth, sessão, CPF, WhatsApp, BRL, novidades) | Este toolkit | `README.md` |
 | Molde de projeto (tokens, ESLint, CI, UI, `CLAUDE.md` de projeto) | Este toolkit | `src/design-tokens.css`, `templates/`, `src/ui/` |
-| Lista de segurança de lançamento (20 pontos) e o que o toolkit já cobre de cada um | Este toolkit | `docs/security-checklist.md` |
+| Lista de segurança de lançamento (20 pontos + complementos C1–C5) e o que o toolkit já cobre de cada um | Este toolkit | `docs/security-checklist.md` |
+| Domínio, e-mail e origem na Cloudflare; auditoria automática do código | Este toolkit | `docs/cloudflare.md` |
 | Quando consultar as listas de segurança e de UX, e como aplicar com critério | Repositório de configurações do Claude | `CLAUDE.md` global, seção "Checklists de auditoria e lançamento" |
 | Heurísticas de UX (10 de Nielsen, 8 Golden Rules de Shneiderman, WCAG) | Repositório de configurações do Claude | `~/.claude/references/ux-ui-standards.md` |
 | Telas de ajuda e novidades | Skills `central-ajuda` e `novidades` (grupo `cultura`) | `claude-global-config`, pasta `skills/`; chegam com `/setup-claude-config` |
@@ -31,6 +32,8 @@ criaria duas versões que divergem com o tempo.
 7. Antes de escrever infra (auth, sessão, hash, cookie), confira o `README.md`
    deste toolkit: pode já estar resolvido. Se o app tem login ou banco, passe também
    por `docs/security-checklist.md`, só nos itens que cabem.
+   Domínio novo ou Cloudflare na frente: `docs/cloudflare.md` (subdomínio do app, SPF/DKIM/DMARC,
+   origem protegida).
 8. Se o app tem usuário final: skills `central-ajuda` e `novidades`.
 9. Se precisar de landing page ou página de vendas: skill `/lp` (discovery → wireframe → build → deploy automático).
 9. Banco no Supabase grátis: copie `templates/backup.yml` (cópia diária, 7 dias) e ligue antes do

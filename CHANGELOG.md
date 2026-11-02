@@ -10,6 +10,10 @@ um consumidor for adotar deveria ter uma entrada aqui antes da tag.
   toque (`pointer-coarse:`, Tailwind 4.1+); com mouse continua 32px (`sm`) e 40px (`md`). Quem
   já copiou o botão antes fica com a versão antiga, por desenho (copiar uma vez, sem sync).
 - docs: `lms-golden-standard.md` liga o Progresso por módulo ao efeito do gradiente de meta.
+- docs: `security-checklist.md` ganha os complementos C1–C5 (SSRF, prompt injection, rotas de
+  admin, chaves de integrações e agentes, origem atrás da Cloudflare), notas de B2B e de log mínimo,
+  e aponta a skill `cloudflare/security-audit-skill`. Novo `docs/cloudflare.md` (proteger a origem,
+  checklist de domínio, hospedagem e prévia por branch). Origem: reels revisados no `save-reels`.
 
 ## v0.4.0
 
